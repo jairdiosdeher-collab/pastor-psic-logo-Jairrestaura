@@ -16,9 +16,8 @@
 body{background:#f0f4f8;color:var(--d);line-height:1.6}
 header{background:linear-gradient(135deg,var(--p),#0d3b4d);color:white;padding:1rem 2rem;position:sticky;top:0;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,.15)}
 header h1{font-size:1.1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-.lock-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.2);padding:.25rem .7rem;border-radius:20px;font-size:.8rem;margin-left:auto}
 .header-row{display:flex;align-items:center;flex-wrap:wrap;gap:1rem}
-nav{background:white;box-shadow:0 2px 6px rgba(0,0,0,.06);padding:.5rem 2rem;position:sticky;top:72px;z-index:999;overflow-x:auto;white-space:nowrap}
+nav{background:white;box-shadow:0 2px 6px rgba(0,0,0,.06);padding:.5rem 2rem;position:sticky;top:64px;z-index:999;overflow-x:auto;white-space:nowrap}
 nav button{border:none;background:transparent;padding:.5rem .6rem;margin:0 .1rem;border-radius:6px;cursor:pointer;transition:.2s;font-size:.78rem}
 nav button.active{background:var(--p);color:white;box-shadow:0 2px 4px rgba(26,95,122,.3)}
 nav button:hover{background:var(--g)}
@@ -82,8 +81,6 @@ tbody tr:hover{background:#f9fafb}
 .between{justify-content:space-between}
 textarea{min-height:100px;resize:vertical}
 .label-sm{font-weight:600;font-size:.8rem;color:#4b5563;margin-top:.5rem;display:inline-block}
-.lock-screen{position:fixed;inset:0;background:rgba(15,43,61,.96);z-index:9999;display:flex;align-items:center;justify-content:center;color:white;padding:1rem}
-.lock-box{background:rgba(255,255,255,.08);padding:2.5rem;border-radius:16px;text-align:center;max-width:420px;width:100%;backdrop-filter:blur(8px)}
 .timeline{position:relative;padding-left:2rem;margin:1rem 0}
 .timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:#cbd5e0}
 .tl-item{position:relative;margin-bottom:1.2rem}
@@ -123,38 +120,16 @@ canvas{max-height:260px;margin:.8rem 0}
 .escala-media{border-color:var(--y);background:#fff8e1}
 .escala-alta{border-color:var(--a);background:#fbe9e7}
 .escala-muyalta{border-color:var(--r);background:#ffebee}
+body.locked{overflow:hidden}
 @media(max-width:900px){.grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr}}
-@media print{header,nav,button,.lock-screen{display:none!important}.card{box-shadow:none;border:1px solid #ddd}.timeline::before{display:none}}
+@media print{header,nav,button,.modal{display:none!important}.card{box-shadow:none;border:1px solid #ddd}.timeline::before{display:none}}
 </style>
 </head>
-<body>
-<div id="lockScreen" class="lock-screen">
-  <div class="lock-box">
-    <h2>🔒 Sesión Protegida</h2>
-    <p class="mt-1 mb-2">Ingrese su clave para acceder al sistema clínico</p>
-    <input type="password" id="accessKeyInput" placeholder="Clave de acceso" autocomplete="off">
-    <button onclick="unlockSession()" class="suc mt-1">Desbloquear</button>
-    <p class="mt-2"><small style="opacity:.7">Inactividad tras 10 min → cierre automático</small></p>
-    <p class="mt-1"><button onclick="mostrarRecuperar()" class="sec" style="font-size:.8rem">¿Olvidó su clave?</button></p>
-  </div>
-</div>
-
-<div id="recuperarModal" class="hidden modal">
-  <div class="modal-box">
-    <h3>🔑 Recuperación de Acceso</h3>
-    <p class="mt-1">Si configuró un correo de recuperación, se le indicará. Si no, la clave inicial es <code>admin123</code>.</p>
-    <input type="email" id="correoRecuperacion" placeholder="Correo registrado">
-    <div class="flex mt-2">
-      <button onclick="procesarRecuperar()" class="suc">Verificar</button>
-      <button onclick="document.getElementById('recuperarModal').classList.add('hidden')" class="sec">Cerrar</button>
-    </div>
-  </div>
-</div>
+<body class="locked">
 
 <header>
   <div class="header-row">
     <h1>🧠 JAIRRESTAURA Clinical AI Pro — Fase 7<small style="margin-left:.5rem;font-weight:normal;opacity:.8">Multiaxial Intelligence Suite | DSM‑5‑TR • PDM‑2 • CIE‑11</small></h1>
-    <span class="lock-badge" id="sessionStatus">🔒 Bloqueada</span>
   </div>
 </header>
 
@@ -607,3 +582,52 @@ canvas{max-height:260px;margin:.8rem 0}
           <textarea id="notaCampo1"></textarea>
           <label class="label-sm" id="lblO">O — Objetivo</label>
           <textarea id="notaCampo2"></textarea>
+        </div>
+        <div>
+          <label class="label-sm" id="lblA">A — Análisis</label>
+          <textarea id="notaCampo3"></textarea>
+          <label class="label-sm" id="lblP">P — Plan</label>
+          <textarea id="notaCampo4"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <button onclick="guardarNota()" class="suc">💾 Guardar</button>
+      <button onclick="previsualizarNota()" class="sec">👁️ Vista Previa</button>
+      <button onclick="exportarNotaPDF()" class="warn">📄 PDF</button>
+    </div>
+    <div id="listaNotas" class="mt-3"></div>
+  </div>
+</section>
+
+<section id="plan" class="tab-content">
+  <div class="card">
+    <h2>🎯 Plan Terapéutico y Recomendaciones por Modelo</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="planPaciente" onchange="cargarPlanTerapeutico()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="planContenido" class="mt-2"></div>
+  </div>
+</section>
+
+<section id="objetivos" class="tab-content">
+  <div class="card">
+    <h2>🎯 Gestor de Objetivos SMART Avanzado</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="smartPaciente" onchange="cargarObjetivosSmart()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="smartForm" class="mt-2">
+      <div class="grid grid-2">
+        <div>
+          <label class="label-sm">Objetivo Específico</label>
+          <input type="text" id="smartTexto">
+          <label class="label-sm">Indicador Medible</label>
+          <input type="text" id="smartIndicador">
+          <label class="label-sm">Acción Alcanzable</label>
+          <input type="text" id="smartAccion">
+        </div>
+        <div>
+          <label class="label-sm">Relevante para</label>
+          <input
