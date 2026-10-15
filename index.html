@@ -4,119 +4,142 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f2b3d">
-<title>JAIRRESTAURA Clinical AI Pro — Fase 3 Profesional</title>
-<link rel="manifest" href="manifest.json">
+<meta name="description" content="Plataforma Clínica Longitudinal Inteligente — Fase 4 Enterprise">
+<title>JAIRRESTAURA Clinical AI Pro — Fase 4 Enterprise</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiSkFJUlJFU1RBVVJBQ0xpbmljYWxBSVBybyIsInNob3J0X25hbWUiOiJKQ0FQcm8iLCJzdGFydF91cmwiOiIuIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBmMmIzZCIsInRoZW1lX2NvbG9yIjoiIzFhNWY3YSIsImljb25zIjpbeyJzZXNzaW9ucyI6WzE5MiwxOTJdLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCIsInNvdXJjZSI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwczovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIgMTkyJy48cmVjdCB3aWR0aD0nMTkyJyBoZWlnaHQ9JzE5MicgZmlsbD0nI2FhNzUnLz48dGV4dCB4PSc5NicgeT0nMTEwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzgwJyBmaWxsPSd3aGl0ZSc+JztleDwvdGV4dD48L3N2Zz4ifV19">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js"></script>
 <style>
-:root{--p:#1a5f7a;--s:#2e8b57;--a:#e67e22;--w:#f8f9fa;--g:#e9ecef;--d:#212529;--r:#dc3545;--y:#ffc107;--bl:#28a745;--n:#6c757d;--v:#6f42c1}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+:root{--p:#1a5f7a;--s:#2e8b57;--a:#e67e22;--w:#f8f9fa;--g:#e9ecef;--d:#212529;--r:#dc3545;--y:#ffc107;--bl:#28a745;--n:#6c757d;--v:#6f42c1;--info:#17a2b8}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif}
 body{background:#f0f4f8;color:var(--d);line-height:1.6}
-header{background:linear-gradient(135deg,var(--p),#0d3b4d);color:white;padding:1rem 2rem;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.15)}
-header h1{font-size:1.4rem}
-.lock-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.2);padding:.3rem .8rem;border-radius:20px;font-size:.85rem;margin-left:1rem}
-nav{background:white;box-shadow:0 2px 4px rgba(0,0,0,.05);padding:.5rem 2rem;position:sticky;top:70px;z-index:999}
-nav button{border:none;background:transparent;padding:.6rem .9rem;margin:0 .15rem;border-radius:6px;cursor:pointer;transition:.2s;font-size:.88rem}
-nav button.active{background:var(--p);color:white}
+header{background:linear-gradient(135deg,var(--p),#0d3b4d);color:white;padding:1rem 2rem;position:sticky;top:0;z-index:1000;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+header h1{font-size:1.3rem;display:flex;align-items:center;gap:.5rem}
+.lock-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.2);padding:.25rem .7rem;border-radius:20px;font-size:.8rem;margin-left:auto}
+.header-row{display:flex;align-items:center;flex-wrap:wrap;gap:1rem}
+nav{background:white;box-shadow:0 2px 6px rgba(0,0,0,.06);padding:.5rem 2rem;position:sticky;top:72px;z-index:999;overflow-x:auto;white-space:nowrap}
+nav button{border:none;background:transparent;padding:.55rem .75rem;margin:0 .1rem;border-radius:6px;cursor:pointer;transition:.2s;font-size:.85rem}
+nav button.active{background:var(--p);color:white;box-shadow:0 2px 4px rgba(26,95,122,.3)}
 nav button:hover{background:var(--g)}
-.container{max-width:1400px;margin:0 auto;padding:1.5rem}
+.container{max-width:1440px;margin:0 auto;padding:1.5rem}
 .card{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:1.5rem;margin-bottom:1.5rem}
-.card h2{font-size:1.1rem;margin-bottom:1rem;color:var(--p);border-bottom:2px solid #e6edf2;padding-bottom:.5rem}
+.card h2{font-size:1.05rem;margin-bottom:1rem;color:var(--p);border-bottom:2px solid #e6edf2;padding-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
 .grid-2{grid-template-columns:repeat(2,1fr)}
 .grid-3{grid-template-columns:repeat(3,1fr)}
 .grid-4{grid-template-columns:repeat(4,1fr)}
-input,select,textarea,button{padding:.75rem 1rem;border:1px solid #ced4da;border-radius:8px;font-size:.95rem;width:100%;margin:.4rem 0;font-family:inherit}
-button{background:var(--p);color:white;border:none;cursor:pointer;font-weight:500;transition:.25s;width:auto;display:inline-block;margin:.3rem}
+.grid-5{grid-template-columns:repeat(5,1fr)}
+input,select,textarea,button{padding:.7rem .9rem;border:1px solid #ced4da;border-radius:8px;font-size:.9rem;width:100%;margin:.35rem 0;font-family:inherit}
+button{background:var(--p);color:white;border:none;cursor:pointer;font-weight:500;transition:.25s;width:auto;display:inline-block;margin:.25rem}
 button:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.12)}
 button.sec{background:var(--g);color:var(--d)}
 button.suc{background:var(--s)}
 button.warn{background:var(--a)}
 button.dan{background:var(--r)}
-small{color:#6c757d}
-.tag{display:inline-block;padding:.25rem .6rem;border-radius:4px;font-size:.78rem;font-weight:600;margin:.15rem}
-.tag-g{background:#e8f5e9;color:#1b5e20}
-.tag-y{background:#fff8e1;color:#f57f17}
-.tag-o{background:#fbe9e7;color:#e64a19}
-.tag-r{background:#ffebee;color:#b71c1c}
-pre{background:#f7f9fb;padding:1rem;border-radius:8px;white-space:pre-wrap;font-size:.88rem;max-height:450px;overflow:auto;margin:.8rem 0}
-.status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:.4rem}
-.badge{padding:.2rem .5rem;border-radius:10px;font-size:.75rem;font-weight:bold}
-.progress-bar{height:8px;background:var(--g);border-radius:4px;overflow:hidden;margin:.5rem 0}
-.progress-fill{height:100%;border-radius:4px;transition:.4s}
-.hidden{display:none!important}
-.alert{padding:1rem;border-radius:8px;margin:1rem 0}
-.alert.info{background:#e3f2fd;border-left:4px solid #1976d2}
-.alert.success{background:#e8f5e9;border-left:4px solid #388e3c}
-.alert.warning{background:#fff8e1;border-left:4px solid #fbc02d}
-.alert.danger{background:#ffebee;border-left:4px solid #d32f2f}
-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.9rem}
-th,td{padding:.7rem;text-align:left;border-bottom:1px solid #eee}
-th{background:#f7f9fb;font-weight:600}
+button.info{background:var(--info)}
+small{color:#6c757d;font-size:.8rem}
+.tag{display:inline-flex;align-items:center;padding:.2rem .5rem;border-radius:4px;font-size:.75rem;font-weight:600;margin:.15rem}
+.tag-g{background:#e8f5e9;color:#1b5e20;border-left:3px solid var(--s)}
+.tag-y{background:#fff8e1;color:#f57f17;border-left:3px solid var(--y)}
+.tag-o{background:#fbe9e7;color:#e64a19;border-left:3px solid var(--a)}
+.tag-r{background:#ffebee;color:#b71c1c;border-left:3px solid var(--r)}
+.tag-v{background:#f3e5f5;color:#7b1fa2;border-left:3px solid var(--v)}
+pre{background:#f7f9fb;padding:1rem;border-radius:8px;white-space:pre-wrap;font-size:.85rem;max-height:450px;overflow:auto;margin:.7rem 0;border-left:3px solid var(--p)}
+.alert{padding:1rem;border-radius:8px;margin:.8rem 0;border-left:4px solid transparent}
+.alert.info{background:#e3f2fd;border-left-color:#1976d2}
+.alert.success{background:#e8f5e9;border-left-color:#388e3c}
+.alert.warning{background:#fff8e1;border-left-color:#fbc02d}
+.alert.danger{background:#ffebee;border-left-color:#d32f2f}
+table{width:100%;border-collapse:collapse;margin:.8rem 0;font-size:.85rem}
+th,td{padding:.6rem .7rem;text-align:left;border-bottom:1px solid #eee;vertical-align:top}
+th{background:#f7f9fb;font-weight:600;color:#374151}
+tbody tr:hover{background:#f9fafb}
 .tab-content{display:none}
 .tab-content.active{display:block}
-.section{margin-bottom:2rem}
-.mt-1{margin-top:.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}
-.mb-1{margin-bottom:.5rem}.mb-2{margin-bottom:1rem}.mb-3{margin-bottom:1.5rem}
-.flex{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.mt-1{margin-top:.4rem}.mt-2{margin-top:.9rem}.mt-3{margin-top:1.4rem}.mt-4{margin-top:2rem}
+.mb-1{margin-bottom:.4rem}.mb-2{margin-bottom:.9rem}.mb-3{margin-bottom:1.4rem}
+.flex{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
 .between{justify-content:space-between}
-textarea{min-height:120px;resize:vertical}
-.label-sm{font-weight:600;font-size:.85rem;color:#495057;margin-top:.6rem;display:inline-block}
-.lock-screen{position:fixed;inset:0;background:rgba(15,43,61,.95);z-index:9999;display:flex;align-items:center;justify-content:center;color:white}
-.lock-box{background:rgba(255,255,255,.1);padding:2.5rem;border-radius:16px;text-align:center;max-width:400px;width:90%}
+textarea{min-height:100px;resize:vertical}
+.label-sm{font-weight:600;font-size:.8rem;color:#4b5563;margin-top:.5rem;display:inline-block}
+.lock-screen{position:fixed;inset:0;background:rgba(15,43,61,.96);z-index:9999;display:flex;align-items:center;justify-content:center;color:white;padding:1rem}
+.lock-box{background:rgba(255,255,255,.08);padding:2.5rem;border-radius:16px;text-align:center;max-width:420px;width:100%;backdrop-filter:blur(8px)}
 .timeline{position:relative;padding-left:2rem;margin:1rem 0}
 .timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:#cbd5e0}
-.tl-item{position:relative;margin-bottom:1.5rem}
-.tl-dot{position:absolute;left:-1.8rem;top:.25rem;width:14px;height:14px;border-radius:50%;background:var(--p);border:2px solid white;box-shadow:0 0 0 2px var(--p)}
+.tl-item{position:relative;margin-bottom:1.2rem}
+.tl-dot{position:absolute;left:-1.8rem;top:.2rem;width:14px;height:14px;border-radius:50%;background:var(--p);border:2px solid white;box-shadow:0 0 0 2px var(--p)}
 .tl-dot.green{background:var(--s)}
 .tl-dot.yellow{background:var(--y)}
 .tl-dot.orange{background:var(--a)}
 .tl-dot.red{background:var(--r)}
 .tl-dot.purple{background:var(--v)}
-.tl-content{background:#f7f9fb;padding:.8rem 1rem;border-radius:8px}
-canvas{max-height:280px;margin:1rem 0}
-@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{overflow-x:auto;white-space:nowrap}}
+.tl-dot.blue{background:var(--p)}
+.tl-content{background:#f7f9fb;padding:.8rem 1rem;border-radius:8px;transition:.2s}
+.tl-content:hover{background:#eef2f6}
+canvas{max-height:260px;margin:.8rem 0}
+.progress-bar{height:8px;background:var(--g);border-radius:4px;overflow:hidden;margin:.3rem 0}
+.progress-fill{height:100%;border-radius:4px;transition:.5s ease}
+.collapsible-header{cursor:pointer;padding:.7rem;background:#f7f9fb;border-radius:6px;margin-top:.5rem;display:flex;justify-content:space-between;align-items:center;font-weight:600}
+.collapsible-content{padding:.8rem 1rem 0 1.2rem;display:none}
+.collapsible-content.open{display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:10000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:white;border-radius:12px;max-width:500px;width:100%;padding:1.5rem;max-height:90vh;overflow:auto}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:linear-gradient(135deg,#fff,#f7f9fb);border-radius:10px;padding:1rem;border-top:3px solid var(--p)}
+.stat-card .num{font-size:1.8rem;font-weight:bold;color:var(--p)}
+.stat-card.green{border-top-color:var(--s)}.stat-card.green .num{color:var(--s)}
+.stat-card.yellow{border-top-color:var(--y)}.stat-card.yellow .num{color:#f57f17}
+.stat-card.orange{border-top-color:var(--a)}.stat-card.orange .num{color:var(--a)}
+.stat-card.red{border-top-color:var(--r)}.stat-card.red .num{color:var(--r)}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr}}
+@media print{header,nav,button,.lock-screen{display:none!important}.card{box-shadow:none;border:1px solid #ddd}.timeline::before{display:none}}
 </style>
 </head>
 <body>
 <div id="lockScreen" class="lock-screen">
   <div class="lock-box">
-    <h2>🔒 Sesión Bloqueada</h2>
-    <p class="mt-1 mb-2">Ingrese su clave de acceso para continuar</p>
+    <h2>🔒 Sesión Protegida</h2>
+    <p class="mt-1 mb-2">Ingrese su clave para acceder al sistema clínico</p>
     <input type="password" id="accessKeyInput" placeholder="Clave de acceso" autocomplete="off">
     <button onclick="unlockSession()" class="suc mt-1">Desbloquear</button>
-    <p class="mt-2"><small style="opacity:.7">Por seguridad, la sesión se bloquea tras 10 min de inactividad</small></p>
+    <p class="mt-2"><small style="opacity:.7">Inactividad tras 10 min → cierre automático</small></p>
     <p class="mt-1"><button onclick="mostrarRecuperar()" class="sec" style="font-size:.8rem">¿Olvidó su clave?</button></p>
   </div>
 </div>
 
-<div id="recuperarModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;display:flex;align-items:center;justify-content:center">
-  <div class="card" style="max-width:420px;width:90%">
+<div id="recuperarModal" class="hidden modal">
+  <div class="modal-box">
     <h3>🔑 Recuperación de Acceso</h3>
-    <p class="mt-1">Ingrese su correo de recuperación establecido. Si no lo configuró, la clave por defecto es <code>admin123</code>.</p>
-    <input type="email" id="correoRecuperacion" placeholder="Correo de recuperación">
-    <div class="flex mt-1">
-      <button onclick="procesarRecuperar()" class="suc">Enviar indicaciones</button>
-      <button onclick="document.getElementById('recuperarModal').classList.add('hidden')" class="sec">Volver</button>
+    <p class="mt-1">Si configuró un correo de recuperación, se le indicará. Si no, la clave inicial es <code>admin123</code>.</p>
+    <input type="email" id="correoRecuperacion" placeholder="Correo registrado">
+    <div class="flex mt-2">
+      <button onclick="procesarRecuperar()" class="suc">Verificar</button>
+      <button onclick="document.getElementById('recuperarModal').classList.add('hidden')" class="sec">Cerrar</button>
     </div>
   </div>
 </div>
 
 <header>
-  <h1>🧠 JAIRRESTAURA Clinical AI Pro <span class="lock-badge" id="sessionStatus">🔒 Bloqueada</span></h1>
-  <p style="opacity:.85;font-size:.9rem">Plataforma Clínica Longitudinal — Fase 3 Profesional</p>
+  <div class="header-row">
+    <h1>🧠 JAIRRESTAURA Clinical AI Pro</h1>
+    <span class="lock-badge" id="sessionStatus">🔒 Bloqueada</span>
+  </div>
+  <p style="opacity:.85;font-size:.85rem;margin-top:.2rem">Asistente Clínico Longitudinal Inteligente — Fase 4 Enterprise</p>
 </header>
 
 <nav id="mainNav">
   <button class="tab-btn active" data-tab="admision">Admisión</button>
   <button class="tab-btn" data-tab="pacientes">Pacientes</button>
+  <button class="tab-btn" data-tab="evaluacion">Evaluación</button>
+  <button class="tab-btn" data-tab="diagnostico">Diagnóstico</button>
   <button class="tab-btn" data-tab="sesiones">Sesiones</button>
   <button class="tab-btn" data-tab="notas">Notas Clínicas</button>
-  <button class="tab-btn" data-tab="supervisor">Supervisor IA</button>
-  <button class="tab-btn" data-tab="plan">Plan Terapéutico</button>
+  <button class="tab-btn" data-tab="plan">Tratamiento</button>
   <button class="tab-btn" data-tab="riesgos">Riesgo General</button>
   <button class="tab-btn" data-tab="suicida">Riesgo Suicida</button>
-  <button class="tab-btn" data-tab="tareas">Tareas</button>
-  <button class="tab-btn" data-tab="crisis">Crisis</button>
+  <button class="tab-btn" data-tab="adherencia">Adherencia</button>
+  <button class="tab-btn" data-tab="resultados">Resultados</button>
   <button class="tab-btn" data-tab="alta">Alta & Posalta</button>
   <button class="tab-btn" data-tab="timeline">Línea de Tiempo</button>
   <button class="tab-btn" data-tab="dashboard">Dashboard</button>
@@ -139,31 +162,36 @@ canvas{max-height:280px;margin:1rem 0}
         <label class="label-sm">Género</label>
         <select id="pGenero">
           <option value="">Seleccionar</option>
-          <option>Masculino</option>
-          <option>Femenino</option>
-          <option>No binario</option>
-          <option>Otro / Prefiero no decir</option>
+          <option>Masculino</option><option>Femenino</option><option>No binario</option><option>Otro / Prefiero no decir</option>
         </select>
+        <label class="label-sm">Identificación</label>
+        <input type="text" id="pIdentificacion" placeholder="Documento">
         <label class="label-sm">Contacto</label>
-        <input type="text" id="pContacto" placeholder="Teléfono / correo" autocomplete="off">
+        <input type="text" id="pContacto" placeholder="Teléfono / correo">
         <label class="label-sm">Ciudad / Residencia</label>
-        <input type="text" id="pCiudad" placeholder="Ej: Ibagué, Tolima" autocomplete="off">
-        <label class="label-sm">Ocupación</label>
-        <input type="text" id="pOcupacion" placeholder="Ocupación / actividad principal" autocomplete="off">
+        <input type="text" id="pCiudad" placeholder="Ej: Ibagué, Tolima">
+        <label class="label-sm">Ocupación / Escolaridad</label>
+        <input type="text" id="pOcupacion" placeholder="Ocupación — nivel educativo">
+        <label class="label-sm">Estado civil / Red de apoyo</label>
+        <input type="text" id="pRedApoyo" placeholder="Familia, convivencia, vínculos">
       </div>
       <div>
         <label class="label-sm">Motivo de consulta</label>
-        <textarea id="pMotivo" placeholder="Descripción del motivo de consulta..."></textarea>
-        <label class="label-sm">Historia remota (antecedentes)</label>
-        <textarea id="pHistRemota" placeholder="Antecedentes personales, familiares, desarrollo vital..."></textarea>
-        <label class="label-sm">Historia reciente / desencadenantes</label>
-        <textarea id="pHistReciente" placeholder="Situaciones actuales que precipitaron la consulta..."></textarea>
-        <label class="label-sm">PHQ-9 inicial</label>
+        <textarea id="pMotivo" placeholder="Descripción detallada del motivo..."></textarea>
+        <label class="label-sm">Historia remota — antecedentes</label>
+        <textarea id="pHistRemota" placeholder="Personal, familiar, desarrollo vital..."></textarea>
+        <label class="label-sm">Historia reciente — desencadenantes</label>
+        <textarea id="pHistReciente" placeholder="Situaciones actuales..."></textarea>
+        <label class="label-sm">Antecedentes psiquiátricos / tratamientos previos</label>
+        <textarea id="pAntecedentesPsi" placeholder="Diagnósticos, medicación, hospitalizaciones..."></textarea>
+        <label class="label-sm">PHQ‑9 inicial</label>
         <input type="number" id="phq9Base" min="0" max="27" placeholder="0–27">
-        <label class="label-sm">GAD-7 inicial</label>
+        <label class="label-sm">GAD‑7 inicial</label>
         <input type="number" id="gad7Base" min="0" max="21" placeholder="0–21">
         <label class="label-sm">WHODAS 2.0 (promedio 0–100)</label>
         <input type="number" id="whodasBase" min="0" max="100" placeholder="0–100">
+        <label class="label-sm">Calidad de vida (0–10)</label>
+        <input type="number" id="calidadVidaBase" min="0" max="10" placeholder="0–10">
       </div>
     </div>
     <div class="mt-2">
@@ -181,7 +209,7 @@ canvas{max-height:280px;margin:1rem 0}
     <div class="flex mb-2">
       <input type="text" id="buscarPaciente" placeholder="🔍 Buscar por nombre..." style="max-width:350px" oninput="filtrarPacientes()">
       <select id="filtroRiesgo" onchange="filtrarPacientes()">
-        <option value="">Todos los niveles de riesgo</option>
+        <option value="">Todos los riesgos</option>
         <option value="Verde">🟢 Verde</option>
         <option value="Amarillo">🟡 Amarillo</option>
         <option value="Naranja">🟠 Naranja</option>
@@ -197,11 +225,61 @@ canvas{max-height:280px;margin:1rem 0}
   </div>
 </section>
 
+<!-- EVALUACIÓN -->
+<section id="evaluacion" class="tab-content">
+  <div class="card">
+    <h2>📋 Evaluación Clínica Completa</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="evalPaciente" onchange="cargarEvaluacion()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="evalContenido" class="mt-2">
+      <div class="grid grid-2">
+        <div>
+          <h3 style="font-size:.95rem">Examen del Estado Mental</h3>
+          <label class="label-sm">Apariencia y conducta</label>
+          <textarea id="emApariencia" placeholder="Vestimenta, contacto visual, actitud..."></textarea>
+          <label class="label-sm">Lenguaje y comunicación</label>
+          <textarea id="emLenguaje" placeholder="Fluidez, volumen, coherencia..."></textarea>
+          <label class="label-sm">Afecto y humor</label>
+          <textarea id="emAfecto" placeholder="Tono afectivo, congruencia, estado de ánimo referido..."></textarea>
+          <label class="label-sm">Pensamiento — forma y contenido</label>
+          <textarea id="emPensamiento" placeholder="Curso, ideas, creencias..."></textarea>
+        </div>
+        <div>
+          <h3 style="font-size:.95rem">Síntomas y Funcionamiento</h3>
+          <label class="label-sm">Percepción y sensopercepción</label>
+          <textarea id="emPercepcion" placeholder="Alucinaciones, ilusiones..."></textarea>
+          <label class="label-sm">Cognición — orientación, memoria, atención</label>
+          <textarea id="emCognicion" placeholder="Orientación en tiempo, espacio, persona..."></textarea>
+          <label class="label-sm">Juicio y capacidad de insight</label>
+          <textarea id="emJuicio" placeholder="Comprensión de la condición, decisiones..."></textarea>
+          <label class="label-sm">Factores biopsicosociales</label>
+          <textarea id="factoresBiopsicosociales" placeholder="Biológicos, psicológicos, sociales..."></textarea>
+        </div>
+      </div>
+      <button onclick="guardarEvaluacion()" class="suc mt-2">💾 Guardar Evaluación</button>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGNÓSTICO -->
+<section id="diagnostico" class="tab-content">
+  <div class="card">
+    <h2>🧠 Motor Clínico Inteligente — Diagnóstico y Formulación</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="diagPaciente" onchange="generarDiagnostico()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="diagContenido" class="mt-2"></div>
+  </div>
+</section>
+
 <!-- SESIONES -->
 <section id="sesiones" class="tab-content">
   <div class="card">
-    <h2>📝 Gestión de Sesiones</h2>
-    <label class="label-sm">Seleccionar paciente</label>
+    <h2>📝 Gestión de Sesiones y Asistente Terapéutico</h2>
+    <label class="label-sm">Paciente</label>
     <select id="sesPaciente" onchange="cargarHistorialSesiones()">
       <option value="">— Seleccionar —</option>
     </select>
@@ -213,13 +291,15 @@ canvas{max-height:280px;margin:1rem 0}
         <label class="label-sm">Fecha</label>
         <input type="date" id="fechaSesion">
         <label class="label-sm">Contenido / Desarrollo</label>
-        <textarea id="contenidoSes" placeholder="Narrativa detallada de la sesión..."></textarea>
-        <label class="label-sm">PHQ-9</label>
+        <textarea id="contenidoSes" placeholder="Narrativa detallada..."></textarea>
+        <label class="label-sm">PHQ‑9</label>
         <input type="number" id="phq9Act" min="0" max="27" placeholder="0–27">
-        <label class="label-sm">GAD-7</label>
+        <label class="label-sm">GAD‑7</label>
         <input type="number" id="gad7Act" min="0" max="21" placeholder="0–21">
         <label class="label-sm">WHODAS</label>
         <input type="number" id="whodasAct" min="0" max="100" placeholder="0–100">
+        <label class="label-sm">Calidad de vida (0–10)</label>
+        <input type="number" id="cvAct" min="0" max="10" placeholder="0–10">
         <label class="label-sm">Alianza terapéutica (0–10)</label>
         <input type="number" id="alianzaAct" min="0" max="10" placeholder="0–10">
         <label class="label-sm">Asistencia</label>
@@ -228,24 +308,35 @@ canvas{max-height:280px;margin:1rem 0}
           <option value="ausente">Ausente</option>
           <option value="reprogramada">Reprogramada</option>
         </select>
-        <button onclick="generarSesionActual()" class="mt-1">🔄 Construir Estructura</button>
-        <div id="sesionGeneradaPreview" class="mt-2"></div>
+        <button onclick="generarGuiaSesion()" class="mt-1">🔄 Generar Guía</button>
+        <div id="sesionPreview" class="mt-2"></div>
       </div>
       <div>
-        <h3 style="font-size:.95rem;color:var(--s)">Sesiones Siguiente y Posterior</h3>
-        <label class="label-sm">Marcos de referencia</label>
+        <h3 style="font-size:.95rem;color:var(--s)">Planificación de Sesiones Siguientes</h3>
+        <label class="label-sm">Marcos</label>
         <div class="flex">
-          <label style="font-size:.85rem"><input type="checkbox" checked id="usarDSM"> DSM‑5‑TR</label>
-          <label style="font-size:.85rem"><input type="checkbox" checked id="usarPDM"> PDM‑2</label>
-          <label style="font-size:.85rem"><input type="checkbox" checked id="usar4P"> Formulación 4P</label>
+          <label style="font-size:.8rem"><input type="checkbox" checked id="usarDSM"> DSM‑5‑TR</label>
+          <label style="font-size:.8rem"><input type="checkbox" checked id="usarPDM"> PDM‑2</label>
+          <label style="font-size:.8rem"><input type="checkbox" checked id="usar4P"> 4P</label>
         </div>
-        <button onclick="generarProximasSesiones()" class="mt-1 suc">Planificar Próximas</button>
+        <label class="label-sm">Modelo terapéutico sugerido</label>
+        <select id="modeloTerap" onchange="actualizarModeloPreview()">
+          <option value="TCC">TCC — Terapia Cognitivo‑Conductual</option>
+          <option value="ACT">ACT — Terapia de Aceptación y Compromiso</option>
+          <option value="DBT">DBT — Terapia Dialéctico‑Conductual</option>
+          <option value="ESQUEMAS">Terapia de Esquemas</option>
+          <option value="IPT">IPT — Terapia Interpersonal</option>
+          <option value="PSICODINAMICA">Psicodinámica</option>
+          <option value="HUMANISTA">Humanista / Centrada en la Persona</option>
+        </select>
+        <div id="modeloPreview" class="mt-1"></div>
+        <button onclick="generarPlanSiguientes()" class="mt-1 suc">Planificar Sesiones Futuras</button>
         <div id="sesionesFuturasPreview" class="mt-2"></div>
       </div>
     </div>
     <div class="mt-2">
       <button onclick="guardarSesion()" class="suc">💾 Guardar Sesión</button>
-      <button onclick="generarNotaDesdeSesion()" class="warn">📄 Generar Nota Clínica</button>
+      <button onclick="generarNotaDesdeSesion()" class="warn">📄 Generar Nota</button>
     </div>
     <div id="historialSesiones" class="mt-3"></div>
   </div>
@@ -271,45 +362,31 @@ canvas{max-height:280px;margin:1rem 0}
       <div class="grid grid-2">
         <div>
           <label class="label-sm" id="lblS">S — Subjetivo</label>
-          <textarea id="notaCampo1" placeholder="Lo que refiere el paciente..."></textarea>
+          <textarea id="notaCampo1" placeholder="Refiere el paciente..."></textarea>
           <label class="label-sm" id="lblO">O — Objetivo</label>
-          <textarea id="notaCampo2" placeholder="Observaciones, escalas, conducta..."></textarea>
+          <textarea id="notaCampo2" placeholder="Observaciones, escalas..."></textarea>
         </div>
         <div>
           <label class="label-sm" id="lblA">A — Análisis / Evaluación</label>
-          <textarea id="notaCampo3" placeholder="Síntesis, formulación, vínculo..."></textarea>
+          <textarea id="notaCampo3" placeholder="Síntesis clínica..."></textarea>
           <label class="label-sm" id="lblP">P — Plan</label>
-          <textarea id="notaCampo4" placeholder="Acuerdos, tareas, próxima sesión..."></textarea>
+          <textarea id="notaCampo4" placeholder="Acuerdos, tareas..."></textarea>
         </div>
       </div>
     </div>
     <div class="mt-2">
       <button onclick="guardarNota()" class="suc">💾 Guardar Nota</button>
-      <button onclick="previsualizarNota()" class="sec">👁️ Previsualizar</button>
-      <button onclick="exportarNotaPDF()" class="warn">📄 Exportar PDF</button>
+      <button onclick="previsualizarNota()" class="sec">👁️ Vista Previa</button>
+      <button onclick="exportarNotaPDF()" class="warn">📄 PDF</button>
     </div>
     <div id="listaNotas" class="mt-3"></div>
   </div>
 </section>
 
-<!-- SUPERVISOR IA AVANZADO -->
-<section id="supervisor" class="tab-content">
-  <div class="card">
-    <h2>🤖 Supervisor Clínico IA Avanzado</h2>
-    <label class="label-sm">Paciente</label>
-    <select id="supPaciente" onchange="cargarSupervision()">
-      <option value="">— Seleccionar —</option>
-    </select>
-    <div id="supervisionContenido" class="mt-2">
-      <p class="alert info">Seleccione un paciente para generar el análisis del Supervisor IA.</p>
-    </div>
-  </div>
-</section>
-
-<!-- PLAN TERAPÉUTICO -->
+<!-- PLAN / TRATAMIENTO -->
 <section id="plan" class="tab-content">
   <div class="card">
-    <h2>🎯 Plan Terapéutico Dinámico</h2>
+    <h2>🎯 Plan Terapéutico y Modelos de Tratamiento</h2>
     <label class="label-sm">Paciente</label>
     <select id="planPaciente" onchange="cargarPlanTerapeutico()">
       <option value="">— Seleccionar —</option>
@@ -318,10 +395,10 @@ canvas{max-height:280px;margin:1rem 0}
   </div>
 </section>
 
-<!-- MOTOR DE RIESGO GENERAL -->
+<!-- RIESGO GENERAL / RECAÍDAS -->
 <section id="riesgos" class="tab-content">
   <div class="card">
-    <h2>⚠️ Motor de Detección de Riesgo y Recaída</h2>
+    <h2>⚠️ Motor de Recaída y Alerta Clínica</h2>
     <label class="label-sm">Paciente</label>
     <select id="riesgoPaciente" onchange="analizarRiesgo()">
       <option value="">— Seleccionar —</option>
@@ -330,10 +407,10 @@ canvas{max-height:280px;margin:1rem 0}
   </div>
 </section>
 
-<!-- MOTOR DE RIESGO SUICIDA -->
+<!-- RIESGO SUICIDA AVANZADO -->
 <section id="suicida" class="tab-content">
   <div class="card">
-    <h2>⚠️ Evaluación Estructurada de Riesgo Suicida</h2>
+    <h2>⚠️ Evaluación de Riesgo Suicida — Columbia Style</h2>
     <label class="label-sm">Paciente</label>
     <select id="suicidaPaciente" onchange="cargarEvaluacionSuicida()">
       <option value="">— Seleccionar —</option>
@@ -341,68 +418,63 @@ canvas{max-height:280px;margin:1rem 0}
     <div id="suicidaForm" class="mt-2">
       <div class="grid grid-2">
         <div>
-          <h3 style="font-size:.95rem">Evaluación</h3>
-          <label class="label-sm">¿Ha tenido pensamientos de acabar con su vida?</label>
-          <select id="rsIdeacion" onchange="calcularRiesgoSuicida()">
-            <option value="0">No</option>
-            <option value="1">Sí, en el pasado</option>
-            <option value="2">Sí, actualmente</option>
+          <h3 style="font-size:.95rem">Evaluación Columbia</h3>
+          <label class="label-sm">1. Pensamientos de acabar con la vida (último mes)</label>
+          <select id="col1" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option><option value="1">Sí</option>
           </select>
-          <label class="label-sm">Frecuencia en el último mes</label>
-          <select id="rsFrecuencia" onchange="calcularRiesgoSuicida()">
-            <option value="0">Nunca</option>
-            <option value="1">Menos de una vez por semana</option>
-            <option value="2">Una o dos veces por semana</option>
-            <option value="3">Casi a diario</option>
+          <label class="label-sm">2. ¿Pensó en cómo hacerlo?</label>
+          <select id="col2" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option><option value="1">Sí</option>
           </select>
-          <label class="label-sm">Intensidad (0–10)</label>
-          <input type="number" id="rsIntensidad" min="0" max="10" oninput="calcularRiesgoSuicida()">
-          <label class="label-sm">¿Tiene un plan específico?</label>
-          <select id="rsPlan" onchange="calcularRiesgoSuicida()">
-            <option value="0">No</option>
-            <option value="1">Pensamiento vago</option>
-            <option value="2">Plan definido pero sin preparativos</option>
-            <option value="3">Plan detallado y con preparativos</option>
+          <label class="label-sm">3. ¿Tiene un plan específico?</label>
+          <select id="col3" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option><option value="1">Sí, vago</option><option value="2">Sí, detallado</option>
           </select>
-          <label class="label-sm">¿Tiene acceso a los medios del plan?</label>
-          <select id="rsMedios" onchange="calcularRiesgoSuicida()">
-            <option value="0">No / sin acceso</option>
-            <option value="1">Acceso posible pero difícil</option>
-            <option value="2">Acceso inmediato y disponible</option>
+          <label class="label-sm">4. ¿Ha intentado acabar con su vida?</label>
+          <select id="col4" onchange="calcularRiesgoSuicida()">
+            <option value="0">Nunca</option><option value="1">Sí, antes de 3 meses</option><option value="2">Sí, en los últimos 3 meses</option>
           </select>
-          <label class="label-sm">¿Ha realizado intentos previos?</label>
-          <select id="rsIntentos" onchange="calcularRiesgoSuicida()">
-            <option value="0">Ninguno</option>
-            <option value="1">Uno, hace más de un año</option>
-            <option value="2">Uno o más en el último año</option>
-            <option value="3">Intento reciente (< 3 meses)</option>
+          <label class="label-sm">5. ¿Tiene acceso a los medios del plan?</label>
+          <select id="col5" onchange="calcularRiesgoSuicida()">
+            <option value="0">No / difícil</option><option value="1">Posible</option><option value="2">Inmediato</option>
+          </select>
+          <h3 class="mt-2" style="font-size:.95rem">Factores Estáticos</h3>
+          <label class="label-sm">Intentos previos</label>
+          <select id="rsIntentosPrev" onchange="calcularRiesgoSuicida()">
+            <option value="0">Ninguno</option><option value="1">Uno</option><option value="2">Dos o más</option>
+          </select>
+          <label class="label-sm">Antecedentes familiares de conducta suicida</label>
+          <select id="rsFamSuic" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option><option value="1">Sí</option>
           </select>
         </div>
         <div>
-          <h3 style="font-size:.95rem">Factores Protectores</h3>
-          <label class="label-sm">Apoyo familiar / red cercana</label>
-          <select id="rsApoyo" onchange="calcularRiesgoSuicida()">
-            <option value="2">Sólido y accesible</option>
-            <option value="1">Parcial / inconsistente</option>
-            <option value="0">Ausente o conflictivo</option>
+          <h3 style="font-size:.95rem">Factores Dinámicos</h3>
+          <label class="label-sm">Desesperanza / visión de futuro</label>
+          <select id="rsDesesperanza" onchange="calcularRiesgoSuicida()">
+            <option value="0">Presente y positiva</option><option value="1">Frágil</option><option value="2">Ausente</option>
           </select>
-          <label class="label-sm">Sentido de vida / esperanza</label>
-          <select id="rsEsperanza" onchange="calcularRiesgoSuicida()">
-            <option value="2">Claro y sostenido</option>
-            <option value="1">Presente pero frágil</option>
-            <option value="0">Ausente</option>
+          <label class="label-sm">Aislamiento / ruptura de vínculos</label>
+          <select id="rsAislamiento" onchange="calcularRiesgoSuicida()">
+            <option value="0">Con red activa</option><option value="1">Parcial</option><option value="2">Aislado</option>
           </select>
-          <label class="label-sm">Responsabilidades / vínculos significativos</label>
+          <label class="label-sm">Estrés agudo / pérdida reciente</label>
+          <select id="rsEstres" onchange="calcularRiesgoSuicida()">
+            <option value="0">Sin factores agudos</option><option value="1">Estrés moderado</option><option value="2">Crisis severa</option>
+          </select>
+          <h3 class="mt-2" style="font-size:.95rem">Factores Protectores</h3>
+          <label class="label-sm">Responsabilidades / vínculos valorados</label>
           <select id="rsVinculos" onchange="calcularRiesgoSuicida()">
-            <option value="2">Firmes y valorados</option>
-            <option value="1">Débiles o tensos</option>
-            <option value="0">Ausentes</option>
+            <option value="2">Firmes</option><option value="1">Débiles</option><option value="0">Ausentes</option>
           </select>
-          <label class="label-sm">Afrontamiento / regulación</label>
-          <select id="rsAfrontamiento" onchange="calcularRiesgoSuicida()">
-            <option value="2">Estrategias funcionales</option>
-            <option value="1">Limitadas o desadaptativas</option>
-            <option value="0">No identifica recursos</option>
+          <label class="label-sm">Esperanza / sentido de vida</label>
+          <select id="rsSentidoVida" onchange="calcularRiesgoSuicida()">
+            <option value="2">Claro</option><option value="1">Frágil</option><option value="0">Ausente</option>
+          </select>
+          <label class="label-sm">Capacidad de buscar ayuda</label>
+          <select id="rsBuscarAyuda" onchange="calcularRiesgoSuicida()">
+            <option value="2">Sí, lo hace</option><option value="1">Con dificultad</option><option value="0">No</option>
           </select>
         </div>
       </div>
@@ -412,59 +484,34 @@ canvas{max-height:280px;margin:1rem 0}
   </div>
 </section>
 
-<!-- TAREAS -->
-<section id="tareas" class="tab-content">
+<!-- ADHERENCIA -->
+<section id="adherencia" class="tab-content">
   <div class="card">
-    <h2>📋 Módulo de Tareas Terapéuticas</h2>
+    <h2>📊 Motor de Adherencia Terapéutica</h2>
     <label class="label-sm">Paciente</label>
-    <select id="tareaPaciente" onchange="cargarTareas()">
+    <select id="adhPaciente" onchange="calcularAdherencia()">
       <option value="">— Seleccionar —</option>
     </select>
-    <div class="grid grid-2 mt-2">
-      <div>
-        <h3 style="font-size:.95rem">Asignar Nueva Tarea</h3>
-        <label class="label-sm">Título</label>
-        <input type="text" id="tareaTitulo" placeholder="Ej: Registro de sueño">
-        <label class="label-sm">Descripción / Instrucciones</label>
-        <textarea id="tareaDesc" placeholder="Pasos a seguir..."></textarea>
-        <label class="label-sm">Fecha límite</label>
-        <input type="date" id="tareaLimite">
-        <label class="label-sm">Área objetivo</label>
-        <select id="tareaArea">
-          <option>Emoción / Estado de ánimo</option>
-          <option>Sueño</option>
-          <option>Activación / Rutina</option>
-          <option>Relaciones</option>
-          <option>Vida espiritual</option>
-          <option>Cognitivo / Pensamientos</option>
-          <option>Físico / Salud</option>
-        </select>
-        <button onclick="asignarTarea()" class="mt-1 suc">➕ Asignar Tarea</button>
-      </div>
-      <div>
-        <h3 style="font-size:.95rem">Registro y Seguimiento</h3>
-        <div id="listaTareas"></div>
-      </div>
-    </div>
+    <div id="adhContenido" class="mt-2"></div>
   </div>
 </section>
 
-<!-- PLAN DE CRISIS -->
-<section id="crisis" class="tab-content">
+<!-- RESULTADOS -->
+<section id="resultados" class="tab-content">
   <div class="card">
-    <h2>🚨 Plan de Manejo de Crisis</h2>
+    <h2>📈 Motor de Resultados y Evolución</h2>
     <label class="label-sm">Paciente</label>
-    <select id="crisisPaciente" onchange="generarPlanCrisis()">
+    <select id="resPaciente" onchange="calcularResultados()">
       <option value="">— Seleccionar —</option>
     </select>
-    <div id="crisisContenido" class="mt-2"></div>
+    <div id="resContenido" class="mt-2"></div>
   </div>
 </section>
 
 <!-- ALTA & POSALTA -->
 <section id="alta" class="tab-content">
   <div class="card">
-    <h2>🏥 Alta Clínica y Seguimiento Posalta</h2>
+    <h2>🏥 Alta Clínica Inteligente y Seguimiento Posalta</h2>
     <label class="label-sm">Paciente</label>
     <select id="altaPaciente" onchange="cargarDatosAlta()">
       <option value="">— Seleccionar —</option>
@@ -476,53 +523,42 @@ canvas{max-height:280px;margin:1rem 0}
 <!-- LÍNEA DE TIEMPO -->
 <section id="timeline" class="tab-content">
   <div class="card">
-    <h2>📅 Línea de Tiempo Clínica</h2>
+    <h2>📅 Línea de Tiempo Clínica Interactiva</h2>
     <label class="label-sm">Paciente</label>
     <select id="timelinePaciente" onchange="construirTimeline()">
       <option value="">— Seleccionar —</option>
     </select>
     <div id="timelineContenido" class="mt-2">
-      <p class="alert info">Seleccione un paciente para ver su trayectoria.</p>
+      <p class="alert info">Seleccione un paciente para ver su trayectoria completa.</p>
     </div>
   </div>
 </section>
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD EJECUTIVO -->
 <section id="dashboard" class="tab-content">
   <div class="card">
-    <h2>📊 Panel de Control Multipaciente</h2>
-    <div class="grid grid-4 mb-3">
-      <div style="text-align:center;padding:1rem;background:#eaf4fb;border-radius:10px">
-        <div style="font-size:2rem;font-weight:bold;color:var(--p)" id="dTotal">0</div>
-        <div style="font-size:.85rem">Pacientes totales</div>
-      </div>
-      <div style="text-align:center;padding:1rem;background:#e8f5e9;border-radius:10px">
-        <div style="font-size:2rem;font-weight:bold;color:var(--s)" id="dActivos">0</div>
-        <div style="font-size:.85rem">En tratamiento</div>
-      </div>
-      <div style="text-align:center;padding:1rem;background:#fff8e1;border-radius:10px">
-        <div style="font-size:2rem;font-weight:bold;color:#f57f17" id="dAlta">0</div>
-        <div style="font-size:.85rem">Dados de alta</div>
-      </div>
-      <div style="text-align:center;padding:1rem;background:#ffebee;border-radius:10px">
-        <div style="font-size:2rem;font-weight:bold;color:var(--r)" id="dCriticos">0</div>
-        <div style="font-size:.85rem">Casos críticos</div>
-      </div>
+    <h2>📊 Panel de Control Ejecutivo</h2>
+    <div class="grid-cards">
+      <div class="stat-card"><div class="num" id="dTotal">0</div><div>Pacientes totales</div></div>
+      <div class="stat-card green"><div class="num" id="dActivos">0</div><div>En tratamiento</div></div>
+      <div class="stat-card yellow"><div class="num" id="dAlta">0</div><div>Dados de alta</div></div>
+      <div class="stat-card orange"><div class="num" id="dRiesgoMedio">0</div><div>Riesgo moderado</div></div>
+      <div class="stat-card red"><div class="num" id="dCriticos">0</div><div>Casos críticos</div></div>
     </div>
     <div class="grid grid-2">
       <div>
-        <h3 style="font-size:.95rem">Evolución de Escalas (promedio)</h3>
+        <h3 style="font-size:.95rem">Evolución Promedio — Escalas</h3>
         <canvas id="graficoEscalas"></canvas>
       </div>
       <div>
-        <h3 style="font-size:.95rem">Nivel de Riesgo</h3>
+        <h3 style="font-size:.95rem">Distribución por Nivel de Riesgo</h3>
         <canvas id="graficoRiesgo"></canvas>
       </div>
     </div>
     <div class="grid grid-2 mt-2">
       <div>
-        <h3 style="font-size:.95rem">Pacientes por Riesgo</h3>
-        <div id="dashRiesgoList"></div>
+        <h3 style="font-size:.95rem">Adherencia Terapéutica</h3>
+        <canvas id="graficoAdherencia"></canvas>
       </div>
       <div>
         <h3 style="font-size:.95rem">Próximos Seguimientos Posalta</h3>
@@ -532,7 +568,7 @@ canvas{max-height:280px;margin:1rem 0}
   </div>
 </section>
 
-<!-- INFORMES -->
+<!-- INFORMES PREMIUM -->
 <section id="informes" class="tab-content">
   <div class="card">
     <h2>📄 Informes Clínicos Premium</h2>
@@ -547,7 +583,7 @@ canvas{max-height:280px;margin:1rem 0}
 <!-- CONFIGURACIÓN -->
 <section id="config" class="tab-content">
   <div class="card">
-    <h2>⚙️ Configuración — Seguridad y Datos</h2>
+    <h2>⚙️ Configuración — Seguridad, Respaldo e Interoperabilidad</h2>
     <div class="grid grid-2">
       <div>
         <h3 style="font-size:.95rem">🔐 Acceso y Cifrado</h3>
@@ -557,31 +593,34 @@ canvas{max-height:280px;margin:1rem 0}
         <input type="password" id="confirmaClave">
         <button onclick="cambiarClave()" class="mt-1">Actualizar Clave</button>
         <label class="label-sm mt-2">Correo de recuperación</label>
-        <input type="email" id="correoRecuperacionGuardado" placeholder="Su correo">
-        <button onclick="guardarCorreoRecuperacion()" class="mt-1 sec">Guardar Correo</button>
-        <p class="mt-2"><button onclick="lockSession()" class="sec">🔒 Bloquear Sesión Ahora</button></p>
-        <p><small>La sesión se bloquea automáticamente tras 10 minutos de inactividad.</small></p>
+        <input type="email" id="correoRecuperacionGuardado" placeholder="Correo">
+        <button onclick="guardarCorreoRecuperacion()" class="mt-1 sec">Guardar</button>
+        <p class="mt-2"><button onclick="lockSession()" class="sec">🔒 Bloquear Ahora</button></p>
+        <p><small>Auto‑bloqueo: 10 min inactividad | Cifrado: AES‑GCM 256b</small></p>
       </div>
       <div>
         <h3 style="font-size:.95rem">💾 Respaldo y Exportación</h3>
+        <p><small>Backup automático cada 5 minutos</small></p>
         <button onclick="exportarTodo('json')">📤 Exportar JSON</button>
         <button onclick="exportarTodo('csv')" class="sec">📤 Exportar CSV</button>
-        <button onclick="importarDatos()" class="warn">📥 Importar JSON</button>
+        <button onclick="exportarTodo('pdf')" class="warn">📄 Informe Global PDF</button>
+        <button onclick="importarDatos()" class="info mt-1">📥 Restaurar desde JSON</button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="procesarImportacion(event)">
         <button onclick="document.getElementById('importFile').click()" class="sec mt-1">Seleccionar Archivo</button>
+        <h3 class="mt-3" style="font-size:.95rem">🔌 Interoperabilidad</h3>
+        <p style="font-size:.8rem">Arquitectura preparada para: HL7 FHIR · APIs REST · sincronización futura con sistemas institucionales</p>
       </div>
     </div>
     <div class="mt-3 alert info">
-      <strong>ℹ️ Seguridad:</strong><br>
-      - Cifrado: AES‑GCM mediante Web Crypto API<br>
-      - Base de datos local: IndexedDB<br>
-      - Datos cifrados antes de almacenarse<br>
-      - Sin envío a servidores externos<br>
-      - PWA instalable con soporte offline
+      <strong>ℹ️ Arquitectura Enterprise:</strong><br>
+      • Base local IndexedDB con cifrado AES‑GCM antes de escritura<br>
+      • Sin envío de datos a servidores externos<br>
+      • PWA: instalable, funciona offline, sincronización en segundo plano<br>
+      • Historial de respaldos locales con marca de tiempo
     </div>
     <div class="mt-2">
       <button onclick="limpiarTodo()" class="dan">⚠️ Borrar TODOS los datos</button>
-      <small> — Acción irreversible. Exporte antes de proceder.</small>
+      <small> — Irreversible. Exporte antes.</small>
     </div>
   </div>
 </section>
@@ -590,224 +629,53 @@ canvas{max-height:280px;margin:1rem 0}
 
 <script>
 // ==========================================================
-// SEGURIDAD Y CRIPTOGRAFÍA — Web Crypto API / AES-GCM
+// SEGURIDAD — Web Crypto API AES-GCM
 // ==========================================================
-const DB_NAME = 'JairRestauraClinicalAIv3';
-const DB_VER = 3;
+const DB_NAME = 'JairRestauraClinicalAIv4';
+const DB_VER = 4;
 let db = null;
 let claveCifrado = null;
 let sesionActiva = false;
 let temporizadorInactividad = null;
-const TIEMPO_INACTIVIDAD = 10 * 60 * 1000; // 10 min
+let temporizadorBackup = null;
+const TIEMPO_INACTIVIDAD = 10 * 60 * 1000;
+const TIEMPO_BACKUP = 5 * 60 * 1000;
 
-// Utilidades de seguridad
 async function derivarClave(contraseña, sal){
   const encoder = new TextEncoder();
   const material = await crypto.subtle.importKey('raw', encoder.encode(contraseña), {name:'PBKDF2'}, false, ['deriveKey']);
   return crypto.subtle.deriveKey(
-    {name:'PBKDF2', salt:sal, iterations:100000, hash:'SHA-256'},
+    {name:'PBKDF2', salt:sal, iterations:150000, hash:'SHA-256'},
     material,
     {name:'AES-GCM', length:256},
     false,
     ['encrypt','decrypt']
   );
 }
-async function cifrarDatos(datos, clave){
+async function cifrarObjeto(obj){
+  const texto = JSON.stringify(obj);
   const encoder = new TextEncoder();
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const cifrado = await crypto.subtle.encrypt(
-    {name:'AES-GCM', iv:iv},
-    clave,
-    encoder.encode(datos)
-  );
-  const sal = crypto.getRandomValues(new Uint8Array(16));
+  const cifrado = await crypto.subtle.encrypt({name:'AES-GCM', iv}, claveCifrado, encoder.encode(texto));
   return {
     datos:btoa(String.fromCharCode(...new Uint8Array(cifrado))),
     iv:btoa(String.fromCharCode(...iv)),
-    sal:btoa(String.fromCharCode(...sal))
+    ts:new Date().toISOString()
   };
 }
-async function descifrarDatos(registro, clave){
+async function descifrarObjeto(reg){
   try{
-    const datos = Uint8Array.from(atob(registro.datos), c=>c.charCodeAt(0));
-    const iv = Uint8Array.from(atob(registro.iv), c=>c.charCodeAt(0));
-    const descifrado = await crypto.subtle.decrypt(
-      {name:'AES-GCM', iv:iv},
-      clave,
-      datos
-    );
-    return new TextDecoder().decode(descifrado);
-  }catch(e){
-    console.error('Error descifrando:', e);
-    return null;
-  }
+    const datos = Uint8Array.from(atob(reg.datos), c=>c.charCodeAt(0));
+    const iv = Uint8Array.from(atob(reg.iv), c=>c.charCodeAt(0));
+    const bin = await crypto.subtle.decrypt({name:'AES-GCM', iv}, claveCifrado, datos);
+    return JSON.parse(new TextDecoder().decode(bin));
+  }catch{return null;}
 }
-function generarSal(){return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))));}
-
-function reiniciarTemporizador(){
-  if(!sesionActiva)return;
-  clearTimeout(temporizadorInactividad);
-  temporizadorInactividad = setTimeout(()=>{
-    if(sesionActiva){
-      alert('Sesión bloqueada por inactividad');
-      lockSession();
-    }
-  }, TIEMPO_INACTIVIDAD);
-}
-document.addEventListener('mousemove', reiniciarTemporizador);
-document.addEventListener('keydown', reiniciarTemporizador);
-
+function generarSal(){return crypto.getRandomValues(new Uint8Array(16));}
 async function verificarContraseña(ingresada){
   const guardada = localStorage.getItem('jr_hash_pass');
-  const salGuardada = localStorage.getItem('jr_sal_pass');
-  if(!guardada || !salGuardada){
-    return ingresada === 'admin123';
-  }
-  const encoder = new TextEncoder();
-  const hash = await crypto.subtle.digest('SHA-256', encoder.encode(ingresada + salGuardada));
-  const hashStr = btoa(String.fromCharCode(...new Uint8Array(hash)));
-  return hashStr === guardada;
+  const sal = localStorage.getItem('jr_sal_pass');
+  if(!guardada || !sal) return ingresada === 'admin123';
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ingresada + atob(sal)));
+  return btoa(String.fromCharCode(...new Uint8Array(hash))) === guardada;
 }
-async function establecerClave(contraseña){
-  const sal = crypto.getRandomValues(new Uint8Array(16));
-  claveCifrado = await derivarClave(contraseña, sal);
-  localStorage.setItem('jr_sal_clave', btoa(String.fromCharCode(...sal)));
-  const salPass = generarSal();
-  const encoder = new TextEncoder();
-  const hash = await crypto.subtle.digest('SHA-256', encoder.encode(contraseña + salPass));
-  localStorage.setItem('jr_hash_pass', btoa(String.fromCharCode(...new Uint8Array(hash))));
-  localStorage.setItem('jr_sal_pass', salPass);
-}
-
-async function unlockSession(){
-  const entrada = document.getElementById('accessKeyInput').value;
-  if(await verificarContraseña(entrada)){
-    const salStr = localStorage.getItem('jr_sal_clave');
-    if(salStr){
-      const sal = Uint8Array.from(atob(salStr), c=>c.charCodeAt(0));
-      claveCifrado = await derivarClave(entrada, sal);
-    }else{
-      await establecerClave(entrada);
-    }
-    sesionActiva = true;
-    document.getElementById('lockScreen').classList.add('hidden');
-    document.getElementById('sessionStatus').innerHTML='✅ Sesión Activa';
-    reiniciarTemporizador();
-    await poblarSelectores();
-    await actualizarDashboard();
-  }else{
-    alert('Clave incorrecta');
-  }
-}
-function lockSession(){
-  sesionActiva = false;
-  clearTimeout(temporizadorInactividad);
-  document.getElementById('lockScreen').classList.remove('hidden');
-  document.getElementById('sessionStatus').innerHTML='🔒 Bloqueada';
-  document.getElementById('accessKeyInput').value='';
-}
-async function cambiarClave(){
-  const nueva = document.getElementById('nuevaClave').value;
-  const confirma = document.getElementById('confirmaClave').value;
-  if(nueva.length < 6){alert('La clave debe tener al menos 6 caracteres');return;}
-  if(nueva !== confirma){alert('Las claves no coinciden');return;}
-  await establecerClave(nueva);
-  alert('Clave actualizada correctamente');
-  document.getElementById('nuevaClave').value='';
-  document.getElementById('confirmaClave').value='';
-}
-function guardarCorreoRecuperacion(){
-  const correo = document.getElementById('correoRecuperacionGuardado').value.trim();
-  if(!correo){alert('Ingrese un correo válido');return;}
-  localStorage.setItem('jr_correo_recuperacion', correo);
-  alert('Correo guardado');
-}
-function mostrarRecuperar(){
-  document.getElementById('recuperarModal').classList.remove('hidden');
-}
-function procesarRecuperar(){
-  const guardado = localStorage.getItem('jr_correo_recuperacion');
-  if(guardado){
-    alert(`Si el correo coincide con el registrado, se enviarían indicaciones. Su correo guardado: ${guardado}\nSi no configuró correo, la clave por defecto es: admin123`);
-  }else{
-    alert('No hay correo de recuperación configurado. La clave por defecto es: admin123');
-  }
-  document.getElementById('recuperarModal').classList.add('hidden');
-}
-
-// ==========================================================
-// INDEXEDDB CON CORRECCIÓN DE TRANSACCIONES
-// ==========================================================
-function abrirDB(){
-  return new Promise((res, rej)=>{
-    const req = indexedDB.open(DB_NAME, DB_VER);
-    req.onupgradeneeded = e=>{
-      db = e.target.result;
-      if(!db.objectStoreNames.contains('pacientes')){
-        const ps = db.createObjectStore('pacientes', {keyPath:'id'});
-        ps.createIndex('nombre','nombre',{unique:false});
-        ps.createIndex('fechaRegistro','fechaRegistro',{unique:false});
-      }
-      if(!db.objectStoreNames.contains('sesiones')){
-        const ss = db.createObjectStore('sesiones', {keyPath:'id'});
-        ss.createIndex('pacienteId','pacienteId',{unique:false});
-        ss.createIndex('fecha','fecha',{unique:false});
-      }
-      if(!db.objectStoreNames.contains('notas')){
-        const ns = db.createObjectStore('notas', {keyPath:'id'});
-        ns.createIndex('pacienteId','pacienteId',{unique:false});
-      }
-      if(!db.objectStoreNames.contains('tareas')){
-        const ts = db.createObjectStore('tareas', {keyPath:'id'});
-        ts.createIndex('pacienteId','pacienteId',{unique:false});
-      }
-      if(!db.objectStoreNames.contains('evaluaciones')){
-        const es = db.createObjectStore('evaluaciones', {keyPath:'id'});
-        es.createIndex('pacienteId','pacienteId',{unique:false});
-      }
-    };
-    req.onsuccess = e=>{db=e.target.result;res(db);};
-    req.onerror = e=>rej(new Error('Error abriendo BD: '+e.target.error));
-  });
-}
-async function initDB(){db = await abrirDB();}
-function generarId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,9);}
-function sanitizarHTML(texto){
-  if(!texto)return '';
-  const temp = document.createElement('div');
-  temp.textContent = texto;
-  return temp.innerHTML;
-}
-
-async function guardarObjeto(almacen, datos){
-  if(!claveCifrado)return null;
-  const tx = db.transaction(almacen, 'readwrite');
-  try{
-    const cadena = JSON.stringify(datos);
-    const cod = await cifrarDatos(cadena, claveCifrado);
-    const registro = {id:datos.id, datosCifrados:cod, fechaGuardado:new Date().toISOString()};
-    tx.objectStore(almacen).put(registro);
-    await new Promise((res, rej)=>{tx.oncomplete=res;tx.onerror=rej;});
-    return datos;
-  }catch(e){console.error('Error guardando:',e);return null;}
-}
-async function obtenerTodos(almacen){
-  if(!claveCifrado)return [];
-  const tx = db.transaction(almacen, 'readonly');
-  const todos = await new Promise((res, rej)=>{
-    const req = tx.objectStore(almacen).getAll();
-    req.onsuccess=()=>res(req.result);
-    req.onerror=rej;
-  });
-  const descifrados = [];
-  for(const r of todos){
-    try{
-      const texto = await descifrarDatos(r.datosCifrados, claveCifrado);
-      if(texto)descifrados.push(JSON.parse(texto));
-    }catch(e){console.warn('Registro corrupto:', r.id);}
-  }
-  return descifrados;
-}
-
-// ==========================================================
-// MÓDULO PACIENTES
