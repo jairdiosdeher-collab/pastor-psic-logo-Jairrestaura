@@ -1,727 +1,813 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JAIRRESTAURA CLINICAL AI PRO — Plataforma Inteligente de Acompañamiento Terapéutico</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1e40af',
-                        secondary: '#0f766e',
-                        accent: '#f59e0b',
-                        danger: '#dc2626',
-                        warning: '#f59e0b',
-                        success: '#16a34a',
-                        neutral: '#334155',
-                        light: '#f8fafc',
-                        dark: '#0f172a',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .scrollbar-hide {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-            .scrollbar-hide::-webkit-scrollbar {
-                display: none;
-            }
-            .radar-chart-container {
-                position: relative;
-                height: 350px;
-                width: 100%;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-        }
-    </style>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .alert-pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-        }
-        
-        .progress-bar {
-            transition: width 0.6s ease;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f2b3d">
+<title>JAIRRESTAURA Clinical AI Pro — Fase 3 Profesional</title>
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+<style>
+:root{--p:#1a5f7a;--s:#2e8b57;--a:#e67e22;--w:#f8f9fa;--g:#e9ecef;--d:#212529;--r:#dc3545;--y:#ffc107;--bl:#28a745;--n:#6c757d;--v:#6f42c1}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
+body{background:#f0f4f8;color:var(--d);line-height:1.6}
+header{background:linear-gradient(135deg,var(--p),#0d3b4d);color:white;padding:1rem 2rem;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+header h1{font-size:1.4rem}
+.lock-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.2);padding:.3rem .8rem;border-radius:20px;font-size:.85rem;margin-left:1rem}
+nav{background:white;box-shadow:0 2px 4px rgba(0,0,0,.05);padding:.5rem 2rem;position:sticky;top:70px;z-index:999}
+nav button{border:none;background:transparent;padding:.6rem .9rem;margin:0 .15rem;border-radius:6px;cursor:pointer;transition:.2s;font-size:.88rem}
+nav button.active{background:var(--p);color:white}
+nav button:hover{background:var(--g)}
+.container{max-width:1400px;margin:0 auto;padding:1.5rem}
+.card{background:white;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:1.5rem;margin-bottom:1.5rem}
+.card h2{font-size:1.1rem;margin-bottom:1rem;color:var(--p);border-bottom:2px solid #e6edf2;padding-bottom:.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+input,select,textarea,button{padding:.75rem 1rem;border:1px solid #ced4da;border-radius:8px;font-size:.95rem;width:100%;margin:.4rem 0;font-family:inherit}
+button{background:var(--p);color:white;border:none;cursor:pointer;font-weight:500;transition:.25s;width:auto;display:inline-block;margin:.3rem}
+button:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.12)}
+button.sec{background:var(--g);color:var(--d)}
+button.suc{background:var(--s)}
+button.warn{background:var(--a)}
+button.dan{background:var(--r)}
+small{color:#6c757d}
+.tag{display:inline-block;padding:.25rem .6rem;border-radius:4px;font-size:.78rem;font-weight:600;margin:.15rem}
+.tag-g{background:#e8f5e9;color:#1b5e20}
+.tag-y{background:#fff8e1;color:#f57f17}
+.tag-o{background:#fbe9e7;color:#e64a19}
+.tag-r{background:#ffebee;color:#b71c1c}
+pre{background:#f7f9fb;padding:1rem;border-radius:8px;white-space:pre-wrap;font-size:.88rem;max-height:450px;overflow:auto;margin:.8rem 0}
+.status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:.4rem}
+.badge{padding:.2rem .5rem;border-radius:10px;font-size:.75rem;font-weight:bold}
+.progress-bar{height:8px;background:var(--g);border-radius:4px;overflow:hidden;margin:.5rem 0}
+.progress-fill{height:100%;border-radius:4px;transition:.4s}
+.hidden{display:none!important}
+.alert{padding:1rem;border-radius:8px;margin:1rem 0}
+.alert.info{background:#e3f2fd;border-left:4px solid #1976d2}
+.alert.success{background:#e8f5e9;border-left:4px solid #388e3c}
+.alert.warning{background:#fff8e1;border-left:4px solid #fbc02d}
+.alert.danger{background:#ffebee;border-left:4px solid #d32f2f}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.9rem}
+th,td{padding:.7rem;text-align:left;border-bottom:1px solid #eee}
+th{background:#f7f9fb;font-weight:600}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.section{margin-bottom:2rem}
+.mt-1{margin-top:.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}
+.mb-1{margin-bottom:.5rem}.mb-2{margin-bottom:1rem}.mb-3{margin-bottom:1.5rem}
+.flex{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+textarea{min-height:120px;resize:vertical}
+.label-sm{font-weight:600;font-size:.85rem;color:#495057;margin-top:.6rem;display:inline-block}
+.lock-screen{position:fixed;inset:0;background:rgba(15,43,61,.95);z-index:9999;display:flex;align-items:center;justify-content:center;color:white}
+.lock-box{background:rgba(255,255,255,.1);padding:2.5rem;border-radius:16px;text-align:center;max-width:400px;width:90%}
+.timeline{position:relative;padding-left:2rem;margin:1rem 0}
+.timeline::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:2px;background:#cbd5e0}
+.tl-item{position:relative;margin-bottom:1.5rem}
+.tl-dot{position:absolute;left:-1.8rem;top:.25rem;width:14px;height:14px;border-radius:50%;background:var(--p);border:2px solid white;box-shadow:0 0 0 2px var(--p)}
+.tl-dot.green{background:var(--s)}
+.tl-dot.yellow{background:var(--y)}
+.tl-dot.orange{background:var(--a)}
+.tl-dot.red{background:var(--r)}
+.tl-dot.purple{background:var(--v)}
+.tl-content{background:#f7f9fb;padding:.8rem 1rem;border-radius:8px}
+canvas{max-height:280px;margin:1rem 0}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{overflow-x:auto;white-space:nowrap}}
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
-    <!-- Cabecera -->
-    <header class="bg-white shadow-md z-50">
-        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
-                    <i class="fa fa-heartbeat text-lg"></i>
-                </div>
-                <h1 class="text-xl font-bold text-slate-800">JAIRRESTAURA <span class="text-primary">CLINICAL AI PRO</span></h1>
-            </div>
-            <div class="flex items-center space-x-4 mt-2 md:mt-0">
-                <span class="text-sm text-slate-500">Paciente: <strong>María López</strong> | ID: P-2026-0042</span>
-                <button class="bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition">
-                    <i class="fa fa-bell-o"></i>
-                </button>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                    <span class="font-semibold">CL</span>
-                </div>
-            </div>
+<body>
+<div id="lockScreen" class="lock-screen">
+  <div class="lock-box">
+    <h2>🔒 Sesión Bloqueada</h2>
+    <p class="mt-1 mb-2">Ingrese su clave de acceso para continuar</p>
+    <input type="password" id="accessKeyInput" placeholder="Clave de acceso" autocomplete="off">
+    <button onclick="unlockSession()" class="suc mt-1">Desbloquear</button>
+    <p class="mt-2"><small style="opacity:.7">Por seguridad, la sesión se bloquea tras 10 min de inactividad</small></p>
+    <p class="mt-1"><button onclick="mostrarRecuperar()" class="sec" style="font-size:.8rem">¿Olvidó su clave?</button></p>
+  </div>
+</div>
+
+<div id="recuperarModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:10000;display:flex;align-items:center;justify-content:center">
+  <div class="card" style="max-width:420px;width:90%">
+    <h3>🔑 Recuperación de Acceso</h3>
+    <p class="mt-1">Ingrese su correo de recuperación establecido. Si no lo configuró, la clave por defecto es <code>admin123</code>.</p>
+    <input type="email" id="correoRecuperacion" placeholder="Correo de recuperación">
+    <div class="flex mt-1">
+      <button onclick="procesarRecuperar()" class="suc">Enviar indicaciones</button>
+      <button onclick="document.getElementById('recuperarModal').classList.add('hidden')" class="sec">Volver</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <h1>🧠 JAIRRESTAURA Clinical AI Pro <span class="lock-badge" id="sessionStatus">🔒 Bloqueada</span></h1>
+  <p style="opacity:.85;font-size:.9rem">Plataforma Clínica Longitudinal — Fase 3 Profesional</p>
+</header>
+
+<nav id="mainNav">
+  <button class="tab-btn active" data-tab="admision">Admisión</button>
+  <button class="tab-btn" data-tab="pacientes">Pacientes</button>
+  <button class="tab-btn" data-tab="sesiones">Sesiones</button>
+  <button class="tab-btn" data-tab="notas">Notas Clínicas</button>
+  <button class="tab-btn" data-tab="supervisor">Supervisor IA</button>
+  <button class="tab-btn" data-tab="plan">Plan Terapéutico</button>
+  <button class="tab-btn" data-tab="riesgos">Riesgo General</button>
+  <button class="tab-btn" data-tab="suicida">Riesgo Suicida</button>
+  <button class="tab-btn" data-tab="tareas">Tareas</button>
+  <button class="tab-btn" data-tab="crisis">Crisis</button>
+  <button class="tab-btn" data-tab="alta">Alta & Posalta</button>
+  <button class="tab-btn" data-tab="timeline">Línea de Tiempo</button>
+  <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="informes">Informes</button>
+  <button class="tab-btn" data-tab="config">⚙️</button>
+</nav>
+
+<div class="container">
+
+<!-- ADMISIÓN -->
+<section id="admision" class="tab-content active">
+  <div class="card">
+    <h2>📋 Ficha de Admisión Clínica</h2>
+    <div class="grid grid-2">
+      <div>
+        <label class="label-sm">Nombre completo</label>
+        <input type="text" id="pNombre" placeholder="Nombre del paciente" autocomplete="off">
+        <label class="label-sm">Fecha de nacimiento</label>
+        <input type="date" id="pFechaNac">
+        <label class="label-sm">Género</label>
+        <select id="pGenero">
+          <option value="">Seleccionar</option>
+          <option>Masculino</option>
+          <option>Femenino</option>
+          <option>No binario</option>
+          <option>Otro / Prefiero no decir</option>
+        </select>
+        <label class="label-sm">Contacto</label>
+        <input type="text" id="pContacto" placeholder="Teléfono / correo" autocomplete="off">
+        <label class="label-sm">Ciudad / Residencia</label>
+        <input type="text" id="pCiudad" placeholder="Ej: Ibagué, Tolima" autocomplete="off">
+        <label class="label-sm">Ocupación</label>
+        <input type="text" id="pOcupacion" placeholder="Ocupación / actividad principal" autocomplete="off">
+      </div>
+      <div>
+        <label class="label-sm">Motivo de consulta</label>
+        <textarea id="pMotivo" placeholder="Descripción del motivo de consulta..."></textarea>
+        <label class="label-sm">Historia remota (antecedentes)</label>
+        <textarea id="pHistRemota" placeholder="Antecedentes personales, familiares, desarrollo vital..."></textarea>
+        <label class="label-sm">Historia reciente / desencadenantes</label>
+        <textarea id="pHistReciente" placeholder="Situaciones actuales que precipitaron la consulta..."></textarea>
+        <label class="label-sm">PHQ-9 inicial</label>
+        <input type="number" id="phq9Base" min="0" max="27" placeholder="0–27">
+        <label class="label-sm">GAD-7 inicial</label>
+        <input type="number" id="gad7Base" min="0" max="21" placeholder="0–21">
+        <label class="label-sm">WHODAS 2.0 (promedio 0–100)</label>
+        <input type="number" id="whodasBase" min="0" max="100" placeholder="0–100">
+      </div>
+    </div>
+    <div class="mt-2">
+      <button onclick="guardarPaciente()" class="suc">💾 Registrar Paciente</button>
+      <button onclick="limpiarAdmision()" class="sec">Limpiar</button>
+    </div>
+    <div id="admisionMsg" class="mt-2"></div>
+  </div>
+</section>
+
+<!-- PACIENTES -->
+<section id="pacientes" class="tab-content">
+  <div class="card">
+    <h2>👥 Listado de Pacientes</h2>
+    <div class="flex mb-2">
+      <input type="text" id="buscarPaciente" placeholder="🔍 Buscar por nombre..." style="max-width:350px" oninput="filtrarPacientes()">
+      <select id="filtroRiesgo" onchange="filtrarPacientes()">
+        <option value="">Todos los niveles de riesgo</option>
+        <option value="Verde">🟢 Verde</option>
+        <option value="Amarillo">🟡 Amarillo</option>
+        <option value="Naranja">🟠 Naranja</option>
+        <option value="Rojo">🔴 Rojo</option>
+      </select>
+      <select id="filtroEstado" onchange="filtrarPacientes()">
+        <option value="">Todos los estados</option>
+        <option value="activo">En tratamiento</option>
+        <option value="alta">Dado de alta</option>
+      </select>
+    </div>
+    <div id="listaPacientes"></div>
+  </div>
+</section>
+
+<!-- SESIONES -->
+<section id="sesiones" class="tab-content">
+  <div class="card">
+    <h2>📝 Gestión de Sesiones</h2>
+    <label class="label-sm">Seleccionar paciente</label>
+    <select id="sesPaciente" onchange="cargarHistorialSesiones()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div class="grid grid-2 mt-2">
+      <div>
+        <h3 style="font-size:.95rem;color:var(--p)">Sesión Actual</h3>
+        <label class="label-sm">N° de sesión</label>
+        <input type="number" id="nSesion" value="1" min="1">
+        <label class="label-sm">Fecha</label>
+        <input type="date" id="fechaSesion">
+        <label class="label-sm">Contenido / Desarrollo</label>
+        <textarea id="contenidoSes" placeholder="Narrativa detallada de la sesión..."></textarea>
+        <label class="label-sm">PHQ-9</label>
+        <input type="number" id="phq9Act" min="0" max="27" placeholder="0–27">
+        <label class="label-sm">GAD-7</label>
+        <input type="number" id="gad7Act" min="0" max="21" placeholder="0–21">
+        <label class="label-sm">WHODAS</label>
+        <input type="number" id="whodasAct" min="0" max="100" placeholder="0–100">
+        <label class="label-sm">Alianza terapéutica (0–10)</label>
+        <input type="number" id="alianzaAct" min="0" max="10" placeholder="0–10">
+        <label class="label-sm">Asistencia</label>
+        <select id="asistenciaAct">
+          <option value="presente">Presente</option>
+          <option value="ausente">Ausente</option>
+          <option value="reprogramada">Reprogramada</option>
+        </select>
+        <button onclick="generarSesionActual()" class="mt-1">🔄 Construir Estructura</button>
+        <div id="sesionGeneradaPreview" class="mt-2"></div>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem;color:var(--s)">Sesiones Siguiente y Posterior</h3>
+        <label class="label-sm">Marcos de referencia</label>
+        <div class="flex">
+          <label style="font-size:.85rem"><input type="checkbox" checked id="usarDSM"> DSM‑5‑TR</label>
+          <label style="font-size:.85rem"><input type="checkbox" checked id="usarPDM"> PDM‑2</label>
+          <label style="font-size:.85rem"><input type="checkbox" checked id="usar4P"> Formulación 4P</label>
         </div>
-    </header>
+        <button onclick="generarProximasSesiones()" class="mt-1 suc">Planificar Próximas</button>
+        <div id="sesionesFuturasPreview" class="mt-2"></div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <button onclick="guardarSesion()" class="suc">💾 Guardar Sesión</button>
+      <button onclick="generarNotaDesdeSesion()" class="warn">📄 Generar Nota Clínica</button>
+    </div>
+    <div id="historialSesiones" class="mt-3"></div>
+  </div>
+</section>
 
-    <!-- Navegación Principal -->
-    <nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
-        <div class="container mx-auto px-4">
-            <div class="flex overflow-x-auto scrollbar-hide space-x-1 py-2" id="mainTabs">
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary" data-tab="evaluacion">
-                    <i class="fa fa-clipboard-check mr-1"></i> Evaluación
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="formulacion">
-                    <i class="fa fa-sitemap mr-1"></i> Formulación
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="tratamiento">
-                    <i class="fa fa-map-o mr-1"></i> Ruta Terapéutica
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="evolucion">
-                    <i class="fa fa-line-chart mr-1"></i> Evolución
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="prediccion">
-                    <i class="fa fa-crystal-ball mr-1"></i> Predicción
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="sesion">
-                    <i class="fa fa-comments mr-1"></i> Sesión
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="pd m2">
-                    <i class="fa fa-puzzle-piece mr-1"></i> PDM-2
-                </button>
-                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="espiritual">
-                    <i class="fa fa-leaf mr-1"></i> Dimensión Espiritual
-                </button>
-            </div>
+<!-- NOTAS CLÍNICAS -->
+<section id="notas" class="tab-content">
+  <div class="card">
+    <h2>📝 Notas Clínicas Estructuradas</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="notaPaciente" onchange="cargarListaNotas()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <label class="label-sm mt-1">Tipo de nota</label>
+    <select id="tipoNota" onchange="cambiarPlantillaNota()">
+      <option value="SOAP">SOAP — Subjetivo, Objetivo, Análisis, Plan</option>
+      <option value="BIRP">BIRP — Conducta, Intervención, Respuesta, Plan</option>
+      <option value="DAP">DAP — Datos, Evaluación, Plan</option>
+      <option value="Narrativa">Nota Narrativa</option>
+      <option value="Ejecutiva">Resumen Ejecutivo</option>
+    </select>
+    <div id="plantillaNota" class="mt-2">
+      <div class="grid grid-2">
+        <div>
+          <label class="label-sm" id="lblS">S — Subjetivo</label>
+          <textarea id="notaCampo1" placeholder="Lo que refiere el paciente..."></textarea>
+          <label class="label-sm" id="lblO">O — Objetivo</label>
+          <textarea id="notaCampo2" placeholder="Observaciones, escalas, conducta..."></textarea>
         </div>
-    </nav>
+        <div>
+          <label class="label-sm" id="lblA">A — Análisis / Evaluación</label>
+          <textarea id="notaCampo3" placeholder="Síntesis, formulación, vínculo..."></textarea>
+          <label class="label-sm" id="lblP">P — Plan</label>
+          <textarea id="notaCampo4" placeholder="Acuerdos, tareas, próxima sesión..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="mt-2">
+      <button onclick="guardarNota()" class="suc">💾 Guardar Nota</button>
+      <button onclick="previsualizarNota()" class="sec">👁️ Previsualizar</button>
+      <button onclick="exportarNotaPDF()" class="warn">📄 Exportar PDF</button>
+    </div>
+    <div id="listaNotas" class="mt-3"></div>
+  </div>
+</section>
 
-    <!-- Contenido Principal -->
-    <main class="flex-grow container mx-auto px-4 py-6">
-        <!-- Pestaña: Evaluación y Diagnóstico -->
-        <section id="evaluacion" class="tab-content active">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Columna Izquierda: Diagnósticos -->
-                <div class="md:col-span-2 space-y-6">
-                    <!-- DSM-5-TR -->
-                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
-                            <i class="fa fa-stethoscope text-primary mr-2"></i> Diagnóstico DSM-5-TR
-                        </h2>
-                        <div class="space-y-3">
-                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-primary">
-                                <p class="font-medium">296.32 Trastorno Depresivo Mayor, episodio recurrente, moderado</p>
-                                <p class="text-sm text-slate-500 mt-1">Criterios cumplidos: ánimo deprimido, anhedonia, alteraciones del sueño y apetito, fatiga, sentimientos de inutilidad — duración superior a 2 semanas.</p>
-                            </div>
-                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-secondary">
-                                <p class="font-medium">300.02 Trastorno de Ansiedad Generalizada</p>
-                                <p class="text-sm text-slate-500 mt-1">Preocupación excesiva difícil de controlar, acompañada de inquietud, fatiga, dificultad de concentración y tensión muscular.</p>
-                            </div>
-                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-accent">
-                                <p class="font-medium">Rasgos de personalidad dependiente y obsesivo-compulsivo</p>
-                                <p class="text-sm text-slate-500 mt-1">Se observan patrones de sumisión, necesidad de reaseguramiento, perfeccionismo y rigidez en el control emocional.</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- SUPERVISOR IA AVANZADO -->
+<section id="supervisor" class="tab-content">
+  <div class="card">
+    <h2>🤖 Supervisor Clínico IA Avanzado</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="supPaciente" onchange="cargarSupervision()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="supervisionContenido" class="mt-2">
+      <p class="alert info">Seleccione un paciente para generar el análisis del Supervisor IA.</p>
+    </div>
+  </div>
+</section>
 
-                    <!-- Formulación 4P -->
-                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
-                            <i class="fa fa-cubes text-secondary mr-2"></i> Formulación Dinámica 4P
-                        </h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <h3 class="font-medium text-primary mb-2">Predisponentes</h3>
-                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
-                                    <li>Historia familiar de depresión y ansiedad</li>
-                                    <li>Crianza con cuidadores sobreprotectores y controladores</li>
-                                    <li>Temperamento ansioso desde la infancia</li>
-                                    <li>Patrones de apego inseguro-evitativo</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 class="font-medium text-secondary mb-2">Precipitantes</h3>
-                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
-                                    <li>Pérdida del empleo hace 3 meses</li>
-                                    <li>Conflicto con pareja de apoyo</li>
-                                    <li>Aislamiento social creciente</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 class="font-medium text-accent mb-2">Perpetuantes</h3>
-                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
-                                    <li>Autocrítica excesiva y estándares poco realistas</li>
-                                    <li>Evitación de situaciones nuevas y retos</li>
-                                    <li>Rigidez en la regulación emocional</li>
-                                    <li>Búsqueda excesiva de aprobación externa</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 class="font-medium text-success mb-2">Protectores</h3>
-                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
-                                    <li>Capacidad de introspección y autoconocimiento</li>
-                                    <li>Disponibilidad para adherirse al tratamiento</li>
-                                    <li>Apoyo parcial de familiares</li>
-                                    <li>Valores personales y sentido de responsabilidad</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-3">Última actualización: 14/10/2026 — Se actualizará automáticamente con nueva información clínica.</p>
-                    </div>
+<!-- PLAN TERAPÉUTICO -->
+<section id="plan" class="tab-content">
+  <div class="card">
+    <h2>🎯 Plan Terapéutico Dinámico</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="planPaciente" onchange="cargarPlanTerapeutico()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="planContenido" class="mt-2"></div>
+  </div>
+</section>
 
-                    <!-- Motores de Selección de Tratamiento -->
-                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
-                            <i class="fa fa-cogs text-accent mr-2"></i> Recomendación de Enfoques Terapéuticos
-                        </h2>
-                        <div class="space-y-4">
-                            <div class="p-3 border rounded-lg bg-blue-50 border-blue-100">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="font-semibold text-primary">Terapia Cognitivo-Conductual (TCC)</h3>
-                                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-medium">Recomendado</span>
-                                </div>
-                                <p class="text-sm mt-2 text-slate-600">Justificación: Dirigida a patrones de pensamiento depresivo y ansioso identificados. Aborda directamente la autocrítica y las creencias nucleares de inadecuación.</p>
-                            </div>
-                            <div class="p-3 border rounded-lg bg-teal-50 border-teal-100">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="font-semibold text-secondary">Terapia de Esquemas</h3>
-                                    <span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-sm font-medium">Prioridad Alta</span>
-                                </div>
-                                <p class="text-sm mt-2 text-slate-600">Justificación: Se detectan esquemas tempranos de "defectuosidad", "dependencia" y "estándares inflexibles" que requieren intervención a nivel estructural.</p>
-                            </div>
-                            <div class="p-3 border rounded-lg bg-amber-50 border-amber-100">
-                                <div class="flex justify-between items-start">
-                                    <h3 class="font-semibold text-accent">Terapia de Aceptación y Compromiso (ACT)</h3>
-                                    <span class="bg-accent/10 text-accent px-2 py-0.5 rounded text-sm font-medium">Complementario</span>
-                                </div>
-                                <p class="text-sm mt-2 text-slate-600">Justificación: Útil para reducir la evitación experiencial y fomentar la conexión con valores personales, especialmente relevante ante la pérdida de rol laboral.</p>
-                            </div>
-                            <div class="p-3 border rounded-lg bg-slate-50 border-slate-100">
-                                <h3 class="font-semibold text-slate-700">Terapia Psicodinámica</h3>
-                                <p class="text-sm mt-2 text-slate-600">Indicada para fase avanzada: exploración de conflictos subyacentes entre autonomía y dependencia, y su relación con la autoestima.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- MOTOR DE RIESGO GENERAL -->
+<section id="riesgos" class="tab-content">
+  <div class="card">
+    <h2>⚠️ Motor de Detección de Riesgo y Recaída</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="riesgoPaciente" onchange="analizarRiesgo()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="riesgoContenido" class="mt-2"></div>
+  </div>
+</section>
 
-                <!-- Columna Derecha: Métricas y Alertas -->
-                <div class="space-y-6">
-                    <!-- Estado Actual -->
-                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4">Estado Clínico Actual</h2>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="font-medium">PHQ-9 (Depresión)</span>
-                                    <span class="font-bold text-danger">18/27</span>
-                                </div>
-                                <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                    <div class="bg-danger h-2.5 rounded-full progress-bar" style="width: 66%"></div>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-1">Nivel: Severo — Meta: {'<'}5 en 12 semanas</p>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="font-medium">GAD-7 (Ansiedad)</span>
-                                    <span class="font-bold text-warning">12/21</span>
-                                </div>
-                                <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                    <div class="bg-warning h-2.5 rounded-full progress-bar" style="width: 57%"></div>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-1">Nivel: Moderado — Meta: {'<'}5 en 10 semanas</p>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-sm mb-1">
-                                    <span class="font-medium">Alianza Terapéutica</span>
-                                    <span class="font-bold text-success">68/100</span>
-                                </div>
-                                <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                    <div class="bg-success h-2.5 rounded-full progress-bar" style="width: 68%"></div>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-1">En desarrollo — Reforzar consensos en sesión</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- MOTOR DE RIESGO SUICIDA -->
+<section id="suicida" class="tab-content">
+  <div class="card">
+    <h2>⚠️ Evaluación Estructurada de Riesgo Suicida</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="suicidaPaciente" onchange="cargarEvaluacionSuicida()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="suicidaForm" class="mt-2">
+      <div class="grid grid-2">
+        <div>
+          <h3 style="font-size:.95rem">Evaluación</h3>
+          <label class="label-sm">¿Ha tenido pensamientos de acabar con su vida?</label>
+          <select id="rsIdeacion" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option>
+            <option value="1">Sí, en el pasado</option>
+            <option value="2">Sí, actualmente</option>
+          </select>
+          <label class="label-sm">Frecuencia en el último mes</label>
+          <select id="rsFrecuencia" onchange="calcularRiesgoSuicida()">
+            <option value="0">Nunca</option>
+            <option value="1">Menos de una vez por semana</option>
+            <option value="2">Una o dos veces por semana</option>
+            <option value="3">Casi a diario</option>
+          </select>
+          <label class="label-sm">Intensidad (0–10)</label>
+          <input type="number" id="rsIntensidad" min="0" max="10" oninput="calcularRiesgoSuicida()">
+          <label class="label-sm">¿Tiene un plan específico?</label>
+          <select id="rsPlan" onchange="calcularRiesgoSuicida()">
+            <option value="0">No</option>
+            <option value="1">Pensamiento vago</option>
+            <option value="2">Plan definido pero sin preparativos</option>
+            <option value="3">Plan detallado y con preparativos</option>
+          </select>
+          <label class="label-sm">¿Tiene acceso a los medios del plan?</label>
+          <select id="rsMedios" onchange="calcularRiesgoSuicida()">
+            <option value="0">No / sin acceso</option>
+            <option value="1">Acceso posible pero difícil</option>
+            <option value="2">Acceso inmediato y disponible</option>
+          </select>
+          <label class="label-sm">¿Ha realizado intentos previos?</label>
+          <select id="rsIntentos" onchange="calcularRiesgoSuicida()">
+            <option value="0">Ninguno</option>
+            <option value="1">Uno, hace más de un año</option>
+            <option value="2">Uno o más en el último año</option>
+            <option value="3">Intento reciente (< 3 meses)</option>
+          </select>
+        </div>
+        <div>
+          <h3 style="font-size:.95rem">Factores Protectores</h3>
+          <label class="label-sm">Apoyo familiar / red cercana</label>
+          <select id="rsApoyo" onchange="calcularRiesgoSuicida()">
+            <option value="2">Sólido y accesible</option>
+            <option value="1">Parcial / inconsistente</option>
+            <option value="0">Ausente o conflictivo</option>
+          </select>
+          <label class="label-sm">Sentido de vida / esperanza</label>
+          <select id="rsEsperanza" onchange="calcularRiesgoSuicida()">
+            <option value="2">Claro y sostenido</option>
+            <option value="1">Presente pero frágil</option>
+            <option value="0">Ausente</option>
+          </select>
+          <label class="label-sm">Responsabilidades / vínculos significativos</label>
+          <select id="rsVinculos" onchange="calcularRiesgoSuicida()">
+            <option value="2">Firmes y valorados</option>
+            <option value="1">Débiles o tensos</option>
+            <option value="0">Ausentes</option>
+          </select>
+          <label class="label-sm">Afrontamiento / regulación</label>
+          <select id="rsAfrontamiento" onchange="calcularRiesgoSuicida()">
+            <option value="2">Estrategias funcionales</option>
+            <option value="1">Limitadas o desadaptativas</option>
+            <option value="0">No identifica recursos</option>
+          </select>
+        </div>
+      </div>
+      <div id="rsResultado" class="mt-3"></div>
+      <button onclick="guardarEvaluacionSuicida()" class="suc mt-2">💾 Guardar Evaluación</button>
+    </div>
+  </div>
+</section>
 
-                    <!-- Alerta Actual -->
-                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 card-hover">
-                        <h3 class="font-semibold text-amber-700 mb-2 flex items-center">
-                            <i class="fa fa-exclamation-triangle mr-2"></i> Alerta Amarilla
-                        </h3>
-                        <p class="text-sm text-amber-800 mb-3">Aumento del malestar afectivo tras la pérdida de empleo; riesgo moderado de evitación.</p>
-                        <h4 class="font-medium text-amber-700 text-sm mb-1">Recomendación:</h4>
-                        <ul class="text-sm text-amber-800 list-disc list-inside space-y-1">
-                            <li>Validar emociones sin reforzar evitación</li>
-                            <li>Enfocar activación conductual gradual</li>
-                            <li>Monitorear ideación autolesiva</li>
-                            <li>Reforzar asistencia a sesiones</li>
-                        </ul>
-                    </div>
+<!-- TAREAS -->
+<section id="tareas" class="tab-content">
+  <div class="card">
+    <h2>📋 Módulo de Tareas Terapéuticas</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="tareaPaciente" onchange="cargarTareas()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div class="grid grid-2 mt-2">
+      <div>
+        <h3 style="font-size:.95rem">Asignar Nueva Tarea</h3>
+        <label class="label-sm">Título</label>
+        <input type="text" id="tareaTitulo" placeholder="Ej: Registro de sueño">
+        <label class="label-sm">Descripción / Instrucciones</label>
+        <textarea id="tareaDesc" placeholder="Pasos a seguir..."></textarea>
+        <label class="label-sm">Fecha límite</label>
+        <input type="date" id="tareaLimite">
+        <label class="label-sm">Área objetivo</label>
+        <select id="tareaArea">
+          <option>Emoción / Estado de ánimo</option>
+          <option>Sueño</option>
+          <option>Activación / Rutina</option>
+          <option>Relaciones</option>
+          <option>Vida espiritual</option>
+          <option>Cognitivo / Pensamientos</option>
+          <option>Físico / Salud</option>
+        </select>
+        <button onclick="asignarTarea()" class="mt-1 suc">➕ Asignar Tarea</button>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem">Registro y Seguimiento</h3>
+        <div id="listaTareas"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                    <!-- Pronóstico Rápido -->
-                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
-                        <h3 class="font-semibold text-slate-800 mb-3">Pronóstico Inicial</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between">
-                                <span class="text-slate-600">Probabilidad de remisión a 6 meses</span>
-                                <span class="font-semibold text-success">87%</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-600">Riesgo de abandono</span>
-                                <span class="font-semibold text-warning">23%</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-slate-600">Riesgo de recaída</span>
-                                <span class="font-semibold text-warning">35%</span>
-                            </div>
-                            <div class="pt-2 mt-2 border-t">
-                                <span class="font-medium">Evaluación general: </span>
-                                <span class="text-success font-semibold">Favorable con tratamiento</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- PLAN DE CRISIS -->
+<section id="crisis" class="tab-content">
+  <div class="card">
+    <h2>🚨 Plan de Manejo de Crisis</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="crisisPaciente" onchange="generarPlanCrisis()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="crisisContenido" class="mt-2"></div>
+  </div>
+</section>
 
-        <!-- Pestaña: Formulación -->
-        <section id="formulacion" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                <h2 class="text-xl font-semibold mb-4">Formulación Clínica Avanzada</h2>
-                <p class="text-slate-600 mb-6">Integración de hallazgos desde los marcos biológico, psicológico, social y espiritual.</p>
-                
-                <div class="space-y-6">
-                    <div class="p-4 border-l-4 border-blue-50 bg-blue-50 rounded-r-lg">
-                        <h3 class="font-semibold text-blue-800 mb-2">Nivel Biológico</h3>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li>Historia familiar de trastornos del estado de ánimo</li>
-                            <li>Patrón de sueño alterado: hipersomnia reactiva</li>
-                            <li>Disminución de energía y vigor físico</li>
-                            <li>Sin hallazgos orgánicos relevantes en estudios complementarios</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="p-4 border-l-4 border-purple-50 bg-purple-50 rounded-r-lg">
-                        <h3 class="font-semibold text-purple-800 mb-2">Nivel Psicológico</h3>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li>Esquemas nucleares activados: Defectuosidad, Dependencia, Estándares Inflexibles</li>
-                            <li>Estilo de apego inseguro con estrategias de búsqueda excesiva de validación externa</li>
-                            <li>Defensas predominantes: intelectualización, formación reactiva, represión afectiva</li>
-                            <li>Autocrítica severa que amplifica el impacto de eventos adversos</li>
-                            <li>Capacidad de mentalización conservada pero restringida bajo estrés</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="p-4 border-l-4 border-green-50 bg-green-50 rounded-r-lg">
-                        <h3 class="font-semibold text-green-800 mb-2">Nivel Social</h3>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li>Pérdida reciente de rol laboral como fuente principal de identidad</li>
-                            <li>Red de apoyo reducida y dependiente de figuras primarias</li>
-                            <li>Aislamiento social progresivo en los últimos meses</li>
-                            <li>Contexto cultural que valora la productividad como medida de valor personal</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="p-4 border-l-4 border-amber-50 bg-amber-50 rounded-r-lg">
-                        <h3 class="font-semibold text-amber-800 mb-2">Nivel Existencial-Espiritual</h3>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li>Crisis de sentido asociada a la pérdida de propósito percibido</li>
-                            <li>Cuestionamiento de valores previamente centrales</li>
-                            <li>Esperanza reducida respecto al futuro</li>
-                            <li>Recursos espirituales presentes pero infrautilizados</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ALTA & POSALTA -->
+<section id="alta" class="tab-content">
+  <div class="card">
+    <h2>🏥 Alta Clínica y Seguimiento Posalta</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="altaPaciente" onchange="cargarDatosAlta()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="altaContenido" class="mt-2"></div>
+  </div>
+</section>
 
-        <!-- Pestaña: Tratamiento -->
-        <section id="tratamiento" class="tab-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Objetivos SMART -->
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white rounded-xl shadow-sm p-5">
-                        <h2 class="text-lg font-semibold mb-4 flex items-center">
-                            <i class="fa fa-bullseye text-primary mr-2"></i> Objetivos Terapéuticos SMART
-                        </h2>
-                        
-                        <div class="space-y-5">
-                            <div class="p-4 bg-slate-50 rounded-lg border">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-semibold">Objetivo #1 — Reducción de Síntomas Depresivos</h3>
-                                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-medium">65% completado</span>
-                                </div>
-                                <p class="text-sm text-slate-600 mb-3">Reducir puntuación PHQ-9 de 18 a menos de 5 en un plazo de 12 semanas.</p>
-                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
-                                    <div class="bg-primary h-2.5 rounded-full" style="width: 65%"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                                    <div>
-                                        <span class="text-slate-500">Inicio:</span>
-                                        <span class="font-medium ml-1">14/10/2026</span>
-                                    </div>
-                                    <div>
-                                        <span class="text-slate-500">Meta:</span>
-                                        <span class="font-medium ml-1">06/01/2027</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="p-4 bg-slate-50 rounded-lg border">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-semibold">Objetivo #2 — Reducción de Ansiedad</h3>
-                                    <span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-sm font-medium">50% completado</span>
-                                </div>
-                                <p class="text-sm text-slate-600 mb-3">Reducir puntuación GAD-7 de 12 a menos de 5 en un plazo de 10 semanas.</p>
-                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
-                                    <div class="bg-secondary h-2.5 rounded-full" style="width: 50%"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                                    <div>
-                                        <span class="text-slate-500">Inicio:</span>
-                                        <span class="font-medium ml-1">14/10/2026</span>
-                                    </div>
-                                    <div>
-                                        <span class="text-slate-500">Meta:</span>
-                                        <span class="font-medium ml-1">27/12/2026</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="p-4 bg-slate-50 rounded-lg border">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="font-semibold">Objetivo #3 — Mejora de Autoestima</h3>
-                                    <span class="bg-accent/10 text-accent px-2 py-0.5 rounded text-sm font-medium">25% completado</span>
-                                </div>
-                                <p class="text-sm text-slate-600 mb-3">Incrementar puntuación en Escala de Autoestima de Rosenberg de 12 a 22 en 16 semanas.</p>
-                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
-                                    <div class="bg-accent h-2.5 rounded-full" style="width: 25%"></div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
-                                    <div>
-                                        <span class="text-slate-500">Inicio:</span>
-                                        <span class="font-medium ml-1">14/10/2026</span>
-                                    </div>
-                                    <div>
-                                        <span class="text-slate-500">Meta:</span>
-                                        <span class="font-medium ml-1">03/02/2027</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!-- LÍNEA DE TIEMPO -->
+<section id="timeline" class="tab-content">
+  <div class="card">
+    <h2>📅 Línea de Tiempo Clínica</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="timelinePaciente" onchange="construirTimeline()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="timelineContenido" class="mt-2">
+      <p class="alert info">Seleccione un paciente para ver su trayectoria.</p>
+    </div>
+  </div>
+</section>
 
-                    <!-- Ruta Terapéutica Sesión por Sesión -->
-                    <div class="bg-white rounded-xl shadow-sm p-5">
-                        <h2 class="text-lg font-semibold mb-4 flex items-center">
-                            <i class="fa fa-map-signs text-secondary mr-2"></i> Ruta Terapéutica Automática
-                        </h2>
-                        
-                        <div class="space-y-3 relative before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-slate-200">
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">1</div>
-                                <div class="p-3 bg-primary/5 rounded-lg border border-primary/20">
-                                    <h4 class="font-medium">Sesión 1 — Psicoeducación y Alianza</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Explicar modelo biopsicosocial, normalizar síntomas, establecer acuerdos terapéuticos, identificar metas del paciente.</p>
-                                    <span class="inline-block mt-2 text-xs bg-success/10 text-success px-2 py-0.5 rounded">Completada</span>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">2</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 2 — Evaluación Integral y Formulación</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Administrar escalas, construir formulación conjunta, presentar plan de tratamiento.</p>
-                                    <span class="inline-block mt-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">En curso</span>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">3</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 3 — Activación Conductual</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Planificación de actividades gratificantes y maestría, registro semanal, estrategias ante barreras.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">4</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 4 — Identificación de Pensamientos Automáticos</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Distinguir pensamientos de emociones, registro diario, identificar distorsiones cognitivas.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">5</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 5 — Reestructuración Cognitiva</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Cuestionar evidencia, generar pensamientos alternativos, experimentos conductuales.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">6-7</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesiones 6-7 — Trabajo con Esquemas</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Explorar orígenes de creencias nucleares, reestructuración de esquemas, experiencias correctivas.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">8</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 8 — Prevención de Recaídas</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Identificar factores desencadenantes, plan de acción, consolidación de avances.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="relative pl-10">
-                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">9</div>
-                                <div class="p-3 bg-slate-50 rounded-lg border">
-                                    <h4 class="font-medium">Sesión 9 — Cierre y Preparación para Alta</h4>
-                                    <p class="text-sm text-slate-600 mt-1">Resumen de aprendizajes, red de apoyo, plan de seguimiento.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- DASHBOARD -->
+<section id="dashboard" class="tab-content">
+  <div class="card">
+    <h2>📊 Panel de Control Multipaciente</h2>
+    <div class="grid grid-4 mb-3">
+      <div style="text-align:center;padding:1rem;background:#eaf4fb;border-radius:10px">
+        <div style="font-size:2rem;font-weight:bold;color:var(--p)" id="dTotal">0</div>
+        <div style="font-size:.85rem">Pacientes totales</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#e8f5e9;border-radius:10px">
+        <div style="font-size:2rem;font-weight:bold;color:var(--s)" id="dActivos">0</div>
+        <div style="font-size:.85rem">En tratamiento</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#fff8e1;border-radius:10px">
+        <div style="font-size:2rem;font-weight:bold;color:#f57f17" id="dAlta">0</div>
+        <div style="font-size:.85rem">Dados de alta</div>
+      </div>
+      <div style="text-align:center;padding:1rem;background:#ffebee;border-radius:10px">
+        <div style="font-size:2rem;font-weight:bold;color:var(--r)" id="dCriticos">0</div>
+        <div style="font-size:.85rem">Casos críticos</div>
+      </div>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <h3 style="font-size:.95rem">Evolución de Escalas (promedio)</h3>
+        <canvas id="graficoEscalas"></canvas>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem">Nivel de Riesgo</h3>
+        <canvas id="graficoRiesgo"></canvas>
+      </div>
+    </div>
+    <div class="grid grid-2 mt-2">
+      <div>
+        <h3 style="font-size:.95rem">Pacientes por Riesgo</h3>
+        <div id="dashRiesgoList"></div>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem">Próximos Seguimientos Posalta</h3>
+        <div id="dashSeguimientoList"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <!-- Panel Lateral: Resumen -->
-                <div class="space-y-6">
-                    <div class="bg-white rounded-xl shadow-sm p-5">
-                        <h3 class="font-semibold mb-3">Resumen del Plan</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex justify-between">
-                                <span class="text-slate-600">Enfoque principal</span>
-                                <span class="font-medium">TCC + Esquemas</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span class="text-slate-600">Sesiones estimadas</span>
-                                <span class="font-medium">16–20</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span class="text-slate-600">Frecuencia</span>
-                                <span class="font-medium">Semanal</span>
-                            </li>
-                            <li class="flex justify-between">
-                                <span class="text-slate-600">Fase actual</span>
-                                <span class="font-medium text-primary">Evaluación / Alianza</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm p-5">
-                        <h3 class="font-semibold mb-3">Indicadores de Mejoría</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex items-start">
-                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
-                                <span>Reducción sostenida en escalas PHQ-9 y GAD-7</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
-                                <span>Aumento de actividades gratificantes y sociales</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
-                                <span>Disminución de pensamientos autocríticos</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
-                                <span>Capacidad de tolerancia a emociones desagradables</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
-                                <span>Proyecto de vida y redefinición de propósito</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-sm p-5 border-2 border-danger/20">
-                        <h3 class="font-semibold mb-3 text-danger">Indicadores de Recaída</h3>
-                        <ul class="space-y-2 text-sm text-slate-600">
-                            <li class="flex items-start">
-                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
-                                <span>Aumento súbito de puntuación en PHQ-9 ≥ 5 puntos</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
-                                <span>Reactivación de aislamiento y abandono de actividades</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
-                                <span>Retorno a creencias nucleares negativas previamente modificadas</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
-                                <span>Inasistencia o retraso repetido a sesiones</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
-                                <span>Autolesiones o ideación suicida — activar protocolo de seguridad</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- INFORMES -->
+<section id="informes" class="tab-content">
+  <div class="card">
+    <h2>📄 Informes Clínicos Premium</h2>
+    <label class="label-sm">Paciente</label>
+    <select id="informePaciente" onchange="cargarVistaInforme()">
+      <option value="">— Seleccionar —</option>
+    </select>
+    <div id="informeVista" class="mt-2"></div>
+  </div>
+</section>
 
-        <!-- Pestaña: Evolución y Gráficos -->
-        <section id="evolucion" class="tab-content">
-            <div class="space-y-6">
-                <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h2 class="text-lg font-semibold mb-6">Evolución Longitudinal de Síntomas</h2>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="font-medium text-center mb-3">PHQ-9 — Depresión</h3>
-                            <div class="h-72">
-                                <canvas id="phq9Chart"></canvas>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-center mb-3">GAD-7 — Ansiedad</h3>
-                            <div class="h-72">
-                                <canvas id="gad7Chart"></canvas>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-center mb-3">Funcionamiento y Calidad de Vida</h3>
-                            <div class="h-72">
-                                <canvas id="whodasChart"></canvas>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-medium text-center mb-3">Proyección de Recuperación</h3>
-                            <div class="h-72">
-                                <canvas id="proyeccionChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h2 class="text-lg font-semibold mb-4">Velocidad y Patrón de Respuesta</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="text-center p-4 bg-slate-50 rounded-lg">
-                            <p class="text-sm text-slate-500 mb-1">Tasa de cambio semanal</p>
-                            <p class="text-2xl font-bold text-primary">-0.85 puntos PHQ-9</p>
-                            <p class="text-xs text-slate-400 mt-2">Mayor que el promedio clínico (-0.5)</p>
-                        </div>
-                        <div class="text-center p-4 bg-slate-50 rounded-lg">
-                            <p class="text-sm text-slate-500 mb-1">Patrón de respuesta</p>
-                            <p class="text-lg font-semibold text-secondary">Lineal con fluctuaciones</p>
-                            <p class="text-xs text-slate-400 mt-2">Respuesta estable, sin caídas bruscas</p>
-                        </div>
-                        <div class="text-center p-4 bg-slate-50 rounded-lg">
-                            <p class="text-sm text-slate-500 mb-1">Tiempo estimado a remisión</p>
-                            <p class="text-2xl font-bold text-success">~9 semanas</p>
-                            <p class="text-xs text-slate-400 mt-2">Intervalo de confianza: 7–11 semanas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- CONFIGURACIÓN -->
+<section id="config" class="tab-content">
+  <div class="card">
+    <h2>⚙️ Configuración — Seguridad y Datos</h2>
+    <div class="grid grid-2">
+      <div>
+        <h3 style="font-size:.95rem">🔐 Acceso y Cifrado</h3>
+        <label class="label-sm">Nueva clave de sesión</label>
+        <input type="password" id="nuevaClave">
+        <label class="label-sm">Confirmar nueva clave</label>
+        <input type="password" id="confirmaClave">
+        <button onclick="cambiarClave()" class="mt-1">Actualizar Clave</button>
+        <label class="label-sm mt-2">Correo de recuperación</label>
+        <input type="email" id="correoRecuperacionGuardado" placeholder="Su correo">
+        <button onclick="guardarCorreoRecuperacion()" class="mt-1 sec">Guardar Correo</button>
+        <p class="mt-2"><button onclick="lockSession()" class="sec">🔒 Bloquear Sesión Ahora</button></p>
+        <p><small>La sesión se bloquea automáticamente tras 10 minutos de inactividad.</small></p>
+      </div>
+      <div>
+        <h3 style="font-size:.95rem">💾 Respaldo y Exportación</h3>
+        <button onclick="exportarTodo('json')">📤 Exportar JSON</button>
+        <button onclick="exportarTodo('csv')" class="sec">📤 Exportar CSV</button>
+        <button onclick="importarDatos()" class="warn">📥 Importar JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="procesarImportacion(event)">
+        <button onclick="document.getElementById('importFile').click()" class="sec mt-1">Seleccionar Archivo</button>
+      </div>
+    </div>
+    <div class="mt-3 alert info">
+      <strong>ℹ️ Seguridad:</strong><br>
+      - Cifrado: AES‑GCM mediante Web Crypto API<br>
+      - Base de datos local: IndexedDB<br>
+      - Datos cifrados antes de almacenarse<br>
+      - Sin envío a servidores externos<br>
+      - PWA instalable con soporte offline
+    </div>
+    <div class="mt-2">
+      <button onclick="limpiarTodo()" class="dan">⚠️ Borrar TODOS los datos</button>
+      <small> — Acción irreversible. Exporte antes de proceder.</small>
+    </div>
+  </div>
+</section>
 
-        <!-- Pestaña: Predicción Clínica -->
-        <section id="prediccion" class="tab-content">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h3 class="font-semibold mb-4 text-center">Probabilidad de Remisión</h3>
-                    <div class="relative w-36 h-36 mx-auto mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 36 36">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#16a34a" stroke-width="3" stroke-dasharray="87 13" stroke-linecap="round"/>
-                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#16a34a">87%</text>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-center text-slate-600">Con un tratamiento continuo y adherente</p>
-                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 82%</p>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h3 class="font-semibold mb-4 text-center">Riesgo de Abandono</h3>
-                    <div class="relative w-36 h-36 mx-auto mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 36 36">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="23 77" stroke-linecap="round"/>
-                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#f59e0b">23%</text>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-center text-slate-600">Factores: evitación, síntomas ansiosos</p>
-                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 76%</p>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm p-5">
-                    <h3 class="font-semibold mb-4 text-center">Riesgo de Recaída</h3>
-                    <div class="relative w-36 h-36 mx-auto mb-4">
-                        <svg class="w-full h-full" viewBox="0 0 36 36">
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
-                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="35 65" stroke-linecap="round"/>
-                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#f59e0b">35%</text>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-center text-slate-600">Factores: estrés crónico, red de apoyo limitada</p>
-                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 79%</p>
-                </div>
-            </div>
-            
-            <div class="mt-6 bg-white rounded-xl shadow-sm p-5">
-                <h3 class="font-semibold mb-4">Pronóstico por Plazos</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-slate-50">
-                                <th class="text-left p-3 rounded-tl-lg">Plazo</th>
-                                <th class="text-left p-3">Estado esperado</th>
-                                <th class="text-left p-3">Indicadores clave</th>
-                                <th class="text-left p-3 rounded-tr-lg">Evaluación</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b">
-                                <td class="p-3 font-medium">1 mes</td>
-                               
+</div>
+
+<script>
+// ==========================================================
+// SEGURIDAD Y CRIPTOGRAFÍA — Web Crypto API / AES-GCM
+// ==========================================================
+const DB_NAME = 'JairRestauraClinicalAIv3';
+const DB_VER = 3;
+let db = null;
+let claveCifrado = null;
+let sesionActiva = false;
+let temporizadorInactividad = null;
+const TIEMPO_INACTIVIDAD = 10 * 60 * 1000; // 10 min
+
+// Utilidades de seguridad
+async function derivarClave(contraseña, sal){
+  const encoder = new TextEncoder();
+  const material = await crypto.subtle.importKey('raw', encoder.encode(contraseña), {name:'PBKDF2'}, false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:sal, iterations:100000, hash:'SHA-256'},
+    material,
+    {name:'AES-GCM', length:256},
+    false,
+    ['encrypt','decrypt']
+  );
+}
+async function cifrarDatos(datos, clave){
+  const encoder = new TextEncoder();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const cifrado = await crypto.subtle.encrypt(
+    {name:'AES-GCM', iv:iv},
+    clave,
+    encoder.encode(datos)
+  );
+  const sal = crypto.getRandomValues(new Uint8Array(16));
+  return {
+    datos:btoa(String.fromCharCode(...new Uint8Array(cifrado))),
+    iv:btoa(String.fromCharCode(...iv)),
+    sal:btoa(String.fromCharCode(...sal))
+  };
+}
+async function descifrarDatos(registro, clave){
+  try{
+    const datos = Uint8Array.from(atob(registro.datos), c=>c.charCodeAt(0));
+    const iv = Uint8Array.from(atob(registro.iv), c=>c.charCodeAt(0));
+    const descifrado = await crypto.subtle.decrypt(
+      {name:'AES-GCM', iv:iv},
+      clave,
+      datos
+    );
+    return new TextDecoder().decode(descifrado);
+  }catch(e){
+    console.error('Error descifrando:', e);
+    return null;
+  }
+}
+function generarSal(){return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))));}
+
+function reiniciarTemporizador(){
+  if(!sesionActiva)return;
+  clearTimeout(temporizadorInactividad);
+  temporizadorInactividad = setTimeout(()=>{
+    if(sesionActiva){
+      alert('Sesión bloqueada por inactividad');
+      lockSession();
+    }
+  }, TIEMPO_INACTIVIDAD);
+}
+document.addEventListener('mousemove', reiniciarTemporizador);
+document.addEventListener('keydown', reiniciarTemporizador);
+
+async function verificarContraseña(ingresada){
+  const guardada = localStorage.getItem('jr_hash_pass');
+  const salGuardada = localStorage.getItem('jr_sal_pass');
+  if(!guardada || !salGuardada){
+    return ingresada === 'admin123';
+  }
+  const encoder = new TextEncoder();
+  const hash = await crypto.subtle.digest('SHA-256', encoder.encode(ingresada + salGuardada));
+  const hashStr = btoa(String.fromCharCode(...new Uint8Array(hash)));
+  return hashStr === guardada;
+}
+async function establecerClave(contraseña){
+  const sal = crypto.getRandomValues(new Uint8Array(16));
+  claveCifrado = await derivarClave(contraseña, sal);
+  localStorage.setItem('jr_sal_clave', btoa(String.fromCharCode(...sal)));
+  const salPass = generarSal();
+  const encoder = new TextEncoder();
+  const hash = await crypto.subtle.digest('SHA-256', encoder.encode(contraseña + salPass));
+  localStorage.setItem('jr_hash_pass', btoa(String.fromCharCode(...new Uint8Array(hash))));
+  localStorage.setItem('jr_sal_pass', salPass);
+}
+
+async function unlockSession(){
+  const entrada = document.getElementById('accessKeyInput').value;
+  if(await verificarContraseña(entrada)){
+    const salStr = localStorage.getItem('jr_sal_clave');
+    if(salStr){
+      const sal = Uint8Array.from(atob(salStr), c=>c.charCodeAt(0));
+      claveCifrado = await derivarClave(entrada, sal);
+    }else{
+      await establecerClave(entrada);
+    }
+    sesionActiva = true;
+    document.getElementById('lockScreen').classList.add('hidden');
+    document.getElementById('sessionStatus').innerHTML='✅ Sesión Activa';
+    reiniciarTemporizador();
+    await poblarSelectores();
+    await actualizarDashboard();
+  }else{
+    alert('Clave incorrecta');
+  }
+}
+function lockSession(){
+  sesionActiva = false;
+  clearTimeout(temporizadorInactividad);
+  document.getElementById('lockScreen').classList.remove('hidden');
+  document.getElementById('sessionStatus').innerHTML='🔒 Bloqueada';
+  document.getElementById('accessKeyInput').value='';
+}
+async function cambiarClave(){
+  const nueva = document.getElementById('nuevaClave').value;
+  const confirma = document.getElementById('confirmaClave').value;
+  if(nueva.length < 6){alert('La clave debe tener al menos 6 caracteres');return;}
+  if(nueva !== confirma){alert('Las claves no coinciden');return;}
+  await establecerClave(nueva);
+  alert('Clave actualizada correctamente');
+  document.getElementById('nuevaClave').value='';
+  document.getElementById('confirmaClave').value='';
+}
+function guardarCorreoRecuperacion(){
+  const correo = document.getElementById('correoRecuperacionGuardado').value.trim();
+  if(!correo){alert('Ingrese un correo válido');return;}
+  localStorage.setItem('jr_correo_recuperacion', correo);
+  alert('Correo guardado');
+}
+function mostrarRecuperar(){
+  document.getElementById('recuperarModal').classList.remove('hidden');
+}
+function procesarRecuperar(){
+  const guardado = localStorage.getItem('jr_correo_recuperacion');
+  if(guardado){
+    alert(`Si el correo coincide con el registrado, se enviarían indicaciones. Su correo guardado: ${guardado}\nSi no configuró correo, la clave por defecto es: admin123`);
+  }else{
+    alert('No hay correo de recuperación configurado. La clave por defecto es: admin123');
+  }
+  document.getElementById('recuperarModal').classList.add('hidden');
+}
+
+// ==========================================================
+// INDEXEDDB CON CORRECCIÓN DE TRANSACCIONES
+// ==========================================================
+function abrirDB(){
+  return new Promise((res, rej)=>{
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = e=>{
+      db = e.target.result;
+      if(!db.objectStoreNames.contains('pacientes')){
+        const ps = db.createObjectStore('pacientes', {keyPath:'id'});
+        ps.createIndex('nombre','nombre',{unique:false});
+        ps.createIndex('fechaRegistro','fechaRegistro',{unique:false});
+      }
+      if(!db.objectStoreNames.contains('sesiones')){
+        const ss = db.createObjectStore('sesiones', {keyPath:'id'});
+        ss.createIndex('pacienteId','pacienteId',{unique:false});
+        ss.createIndex('fecha','fecha',{unique:false});
+      }
+      if(!db.objectStoreNames.contains('notas')){
+        const ns = db.createObjectStore('notas', {keyPath:'id'});
+        ns.createIndex('pacienteId','pacienteId',{unique:false});
+      }
+      if(!db.objectStoreNames.contains('tareas')){
+        const ts = db.createObjectStore('tareas', {keyPath:'id'});
+        ts.createIndex('pacienteId','pacienteId',{unique:false});
+      }
+      if(!db.objectStoreNames.contains('evaluaciones')){
+        const es = db.createObjectStore('evaluaciones', {keyPath:'id'});
+        es.createIndex('pacienteId','pacienteId',{unique:false});
+      }
+    };
+    req.onsuccess = e=>{db=e.target.result;res(db);};
+    req.onerror = e=>rej(new Error('Error abriendo BD: '+e.target.error));
+  });
+}
+async function initDB(){db = await abrirDB();}
+function generarId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,9);}
+function sanitizarHTML(texto){
+  if(!texto)return '';
+  const temp = document.createElement('div');
+  temp.textContent = texto;
+  return temp.innerHTML;
+}
+
+async function guardarObjeto(almacen, datos){
+  if(!claveCifrado)return null;
+  const tx = db.transaction(almacen, 'readwrite');
+  try{
+    const cadena = JSON.stringify(datos);
+    const cod = await cifrarDatos(cadena, claveCifrado);
+    const registro = {id:datos.id, datosCifrados:cod, fechaGuardado:new Date().toISOString()};
+    tx.objectStore(almacen).put(registro);
+    await new Promise((res, rej)=>{tx.oncomplete=res;tx.onerror=rej;});
+    return datos;
+  }catch(e){console.error('Error guardando:',e);return null;}
+}
+async function obtenerTodos(almacen){
+  if(!claveCifrado)return [];
+  const tx = db.transaction(almacen, 'readonly');
+  const todos = await new Promise((res, rej)=>{
+    const req = tx.objectStore(almacen).getAll();
+    req.onsuccess=()=>res(req.result);
+    req.onerror=rej;
+  });
+  const descifrados = [];
+  for(const r of todos){
+    try{
+      const texto = await descifrarDatos(r.datosCifrados, claveCifrado);
+      if(texto)descifrados.push(JSON.parse(texto));
+    }catch(e){console.warn('Registro corrupto:', r.id);}
+  }
+  return descifrados;
+}
+
+// ==========================================================
+// MÓDULO PACIENTES
