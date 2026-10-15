@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAIRRESTAURA CLINICAL AI PRO — Plataforma Inteligente de Acompañamiento Terapéutico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#0f766e',
+                        accent: '#f59e0b',
+                        danger: '#dc2626',
+                        warning: '#f59e0b',
+                        success: '#16a34a',
+                        neutral: '#334155',
+                        light: '#f8fafc',
+                        dark: '#0f172a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .radar-chart-container {
+                position: relative;
+                height: 350px;
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .alert-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Cabecera -->
+    <header class="bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+                    <i class="fa fa-heartbeat text-lg"></i>
+                </div>
+                <h1 class="text-xl font-bold text-slate-800">JAIRRESTAURA <span class="text-primary">CLINICAL AI PRO</span></h1>
+            </div>
+            <div class="flex items-center space-x-4 mt-2 md:mt-0">
+                <span class="text-sm text-slate-500">Paciente: <strong>María López</strong> | ID: P-2026-0042</span>
+                <button class="bg-slate-100 hover:bg-slate-200 p-2 rounded-full transition">
+                    <i class="fa fa-bell-o"></i>
+                </button>
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <span class="font-semibold">CL</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación Principal -->
+    <nav class="bg-white border-b sticky top-0 z-40 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto scrollbar-hide space-x-1 py-2" id="mainTabs">
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary" data-tab="evaluacion">
+                    <i class="fa fa-clipboard-check mr-1"></i> Evaluación
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="formulacion">
+                    <i class="fa fa-sitemap mr-1"></i> Formulación
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="tratamiento">
+                    <i class="fa fa-map-o mr-1"></i> Ruta Terapéutica
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="evolucion">
+                    <i class="fa fa-line-chart mr-1"></i> Evolución
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="prediccion">
+                    <i class="fa fa-crystal-ball mr-1"></i> Predicción
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="sesion">
+                    <i class="fa fa-comments mr-1"></i> Sesión
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="pd m2">
+                    <i class="fa fa-puzzle-piece mr-1"></i> PDM-2
+                </button>
+                <button class="tab-btn whitespace-nowrap px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700" data-tab="espiritual">
+                    <i class="fa fa-leaf mr-1"></i> Dimensión Espiritual
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow container mx-auto px-4 py-6">
+        <!-- Pestaña: Evaluación y Diagnóstico -->
+        <section id="evaluacion" class="tab-content active">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Columna Izquierda: Diagnósticos -->
+                <div class="md:col-span-2 space-y-6">
+                    <!-- DSM-5-TR -->
+                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                            <i class="fa fa-stethoscope text-primary mr-2"></i> Diagnóstico DSM-5-TR
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-primary">
+                                <p class="font-medium">296.32 Trastorno Depresivo Mayor, episodio recurrente, moderado</p>
+                                <p class="text-sm text-slate-500 mt-1">Criterios cumplidos: ánimo deprimido, anhedonia, alteraciones del sueño y apetito, fatiga, sentimientos de inutilidad — duración superior a 2 semanas.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-secondary">
+                                <p class="font-medium">300.02 Trastorno de Ansiedad Generalizada</p>
+                                <p class="text-sm text-slate-500 mt-1">Preocupación excesiva difícil de controlar, acompañada de inquietud, fatiga, dificultad de concentración y tensión muscular.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-accent">
+                                <p class="font-medium">Rasgos de personalidad dependiente y obsesivo-compulsivo</p>
+                                <p class="text-sm text-slate-500 mt-1">Se observan patrones de sumisión, necesidad de reaseguramiento, perfeccionismo y rigidez en el control emocional.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulación 4P -->
+                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                            <i class="fa fa-cubes text-secondary mr-2"></i> Formulación Dinámica 4P
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="font-medium text-primary mb-2">Predisponentes</h3>
+                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
+                                    <li>Historia familiar de depresión y ansiedad</li>
+                                    <li>Crianza con cuidadores sobreprotectores y controladores</li>
+                                    <li>Temperamento ansioso desde la infancia</li>
+                                    <li>Patrones de apego inseguro-evitativo</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-secondary mb-2">Precipitantes</h3>
+                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
+                                    <li>Pérdida del empleo hace 3 meses</li>
+                                    <li>Conflicto con pareja de apoyo</li>
+                                    <li>Aislamiento social creciente</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-accent mb-2">Perpetuantes</h3>
+                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
+                                    <li>Autocrítica excesiva y estándares poco realistas</li>
+                                    <li>Evitación de situaciones nuevas y retos</li>
+                                    <li>Rigidez en la regulación emocional</li>
+                                    <li>Búsqueda excesiva de aprobación externa</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-success mb-2">Protectores</h3>
+                                <ul class="list-disc list-inside text-sm space-y-1 text-slate-600">
+                                    <li>Capacidad de introspección y autoconocimiento</li>
+                                    <li>Disponibilidad para adherirse al tratamiento</li>
+                                    <li>Apoyo parcial de familiares</li>
+                                    <li>Valores personales y sentido de responsabilidad</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3">Última actualización: 14/10/2026 — Se actualizará automáticamente con nueva información clínica.</p>
+                    </div>
+
+                    <!-- Motores de Selección de Tratamiento -->
+                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center">
+                            <i class="fa fa-cogs text-accent mr-2"></i> Recomendación de Enfoques Terapéuticos
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="p-3 border rounded-lg bg-blue-50 border-blue-100">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-semibold text-primary">Terapia Cognitivo-Conductual (TCC)</h3>
+                                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-medium">Recomendado</span>
+                                </div>
+                                <p class="text-sm mt-2 text-slate-600">Justificación: Dirigida a patrones de pensamiento depresivo y ansioso identificados. Aborda directamente la autocrítica y las creencias nucleares de inadecuación.</p>
+                            </div>
+                            <div class="p-3 border rounded-lg bg-teal-50 border-teal-100">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-semibold text-secondary">Terapia de Esquemas</h3>
+                                    <span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-sm font-medium">Prioridad Alta</span>
+                                </div>
+                                <p class="text-sm mt-2 text-slate-600">Justificación: Se detectan esquemas tempranos de "defectuosidad", "dependencia" y "estándares inflexibles" que requieren intervención a nivel estructural.</p>
+                            </div>
+                            <div class="p-3 border rounded-lg bg-amber-50 border-amber-100">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-semibold text-accent">Terapia de Aceptación y Compromiso (ACT)</h3>
+                                    <span class="bg-accent/10 text-accent px-2 py-0.5 rounded text-sm font-medium">Complementario</span>
+                                </div>
+                                <p class="text-sm mt-2 text-slate-600">Justificación: Útil para reducir la evitación experiencial y fomentar la conexión con valores personales, especialmente relevante ante la pérdida de rol laboral.</p>
+                            </div>
+                            <div class="p-3 border rounded-lg bg-slate-50 border-slate-100">
+                                <h3 class="font-semibold text-slate-700">Terapia Psicodinámica</h3>
+                                <p class="text-sm mt-2 text-slate-600">Indicada para fase avanzada: exploración de conflictos subyacentes entre autonomía y dependencia, y su relación con la autoestima.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Métricas y Alertas -->
+                <div class="space-y-6">
+                    <!-- Estado Actual -->
+                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                        <h2 class="text-lg font-semibold text-slate-800 mb-4">Estado Clínico Actual</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium">PHQ-9 (Depresión)</span>
+                                    <span class="font-bold text-danger">18/27</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                    <div class="bg-danger h-2.5 rounded-full progress-bar" style="width: 66%"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">Nivel: Severo — Meta: {'<'}5 en 12 semanas</p>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium">GAD-7 (Ansiedad)</span>
+                                    <span class="font-bold text-warning">12/21</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                    <div class="bg-warning h-2.5 rounded-full progress-bar" style="width: 57%"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">Nivel: Moderado — Meta: {'<'}5 en 10 semanas</p>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-medium">Alianza Terapéutica</span>
+                                    <span class="font-bold text-success">68/100</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                    <div class="bg-success h-2.5 rounded-full progress-bar" style="width: 68%"></div>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">En desarrollo — Reforzar consensos en sesión</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerta Actual -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 card-hover">
+                        <h3 class="font-semibold text-amber-700 mb-2 flex items-center">
+                            <i class="fa fa-exclamation-triangle mr-2"></i> Alerta Amarilla
+                        </h3>
+                        <p class="text-sm text-amber-800 mb-3">Aumento del malestar afectivo tras la pérdida de empleo; riesgo moderado de evitación.</p>
+                        <h4 class="font-medium text-amber-700 text-sm mb-1">Recomendación:</h4>
+                        <ul class="text-sm text-amber-800 list-disc list-inside space-y-1">
+                            <li>Validar emociones sin reforzar evitación</li>
+                            <li>Enfocar activación conductual gradual</li>
+                            <li>Monitorear ideación autolesiva</li>
+                            <li>Reforzar asistencia a sesiones</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pronóstico Rápido -->
+                    <div class="bg-white rounded-xl shadow-sm p-5 card-hover">
+                        <h3 class="font-semibold text-slate-800 mb-3">Pronóstico Inicial</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Probabilidad de remisión a 6 meses</span>
+                                <span class="font-semibold text-success">87%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Riesgo de abandono</span>
+                                <span class="font-semibold text-warning">23%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Riesgo de recaída</span>
+                                <span class="font-semibold text-warning">35%</span>
+                            </div>
+                            <div class="pt-2 mt-2 border-t">
+                                <span class="font-medium">Evaluación general: </span>
+                                <span class="text-success font-semibold">Favorable con tratamiento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña: Formulación -->
+        <section id="formulacion" class="tab-content">
+            <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4">Formulación Clínica Avanzada</h2>
+                <p class="text-slate-600 mb-6">Integración de hallazgos desde los marcos biológico, psicológico, social y espiritual.</p>
+                
+                <div class="space-y-6">
+                    <div class="p-4 border-l-4 border-blue-50 bg-blue-50 rounded-r-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Nivel Biológico</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Historia familiar de trastornos del estado de ánimo</li>
+                            <li>Patrón de sueño alterado: hipersomnia reactiva</li>
+                            <li>Disminución de energía y vigor físico</li>
+                            <li>Sin hallazgos orgánicos relevantes en estudios complementarios</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border-l-4 border-purple-50 bg-purple-50 rounded-r-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">Nivel Psicológico</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Esquemas nucleares activados: Defectuosidad, Dependencia, Estándares Inflexibles</li>
+                            <li>Estilo de apego inseguro con estrategias de búsqueda excesiva de validación externa</li>
+                            <li>Defensas predominantes: intelectualización, formación reactiva, represión afectiva</li>
+                            <li>Autocrítica severa que amplifica el impacto de eventos adversos</li>
+                            <li>Capacidad de mentalización conservada pero restringida bajo estrés</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border-l-4 border-green-50 bg-green-50 rounded-r-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">Nivel Social</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Pérdida reciente de rol laboral como fuente principal de identidad</li>
+                            <li>Red de apoyo reducida y dependiente de figuras primarias</li>
+                            <li>Aislamiento social progresivo en los últimos meses</li>
+                            <li>Contexto cultural que valora la productividad como medida de valor personal</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border-l-4 border-amber-50 bg-amber-50 rounded-r-lg">
+                        <h3 class="font-semibold text-amber-800 mb-2">Nivel Existencial-Espiritual</h3>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Crisis de sentido asociada a la pérdida de propósito percibido</li>
+                            <li>Cuestionamiento de valores previamente centrales</li>
+                            <li>Esperanza reducida respecto al futuro</li>
+                            <li>Recursos espirituales presentes pero infrautilizados</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña: Tratamiento -->
+        <section id="tratamiento" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Objetivos SMART -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm p-5">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fa fa-bullseye text-primary mr-2"></i> Objetivos Terapéuticos SMART
+                        </h2>
+                        
+                        <div class="space-y-5">
+                            <div class="p-4 bg-slate-50 rounded-lg border">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold">Objetivo #1 — Reducción de Síntomas Depresivos</h3>
+                                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-medium">65% completado</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mb-3">Reducir puntuación PHQ-9 de 18 a menos de 5 en un plazo de 12 semanas.</p>
+                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                                    <div class="bg-primary h-2.5 rounded-full" style="width: 65%"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
+                                    <div>
+                                        <span class="text-slate-500">Inicio:</span>
+                                        <span class="font-medium ml-1">14/10/2026</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500">Meta:</span>
+                                        <span class="font-medium ml-1">06/01/2027</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-slate-50 rounded-lg border">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold">Objetivo #2 — Reducción de Ansiedad</h3>
+                                    <span class="bg-secondary/10 text-secondary px-2 py-0.5 rounded text-sm font-medium">50% completado</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mb-3">Reducir puntuación GAD-7 de 12 a menos de 5 en un plazo de 10 semanas.</p>
+                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                                    <div class="bg-secondary h-2.5 rounded-full" style="width: 50%"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
+                                    <div>
+                                        <span class="text-slate-500">Inicio:</span>
+                                        <span class="font-medium ml-1">14/10/2026</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500">Meta:</span>
+                                        <span class="font-medium ml-1">27/12/2026</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="p-4 bg-slate-50 rounded-lg border">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold">Objetivo #3 — Mejora de Autoestima</h3>
+                                    <span class="bg-accent/10 text-accent px-2 py-0.5 rounded text-sm font-medium">25% completado</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mb-3">Incrementar puntuación en Escala de Autoestima de Rosenberg de 12 a 22 en 16 semanas.</p>
+                                <div class="w-full bg-slate-200 rounded-full h-2.5 mb-2">
+                                    <div class="bg-accent h-2.5 rounded-full" style="width: 25%"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 text-sm mt-2">
+                                    <div>
+                                        <span class="text-slate-500">Inicio:</span>
+                                        <span class="font-medium ml-1">14/10/2026</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-slate-500">Meta:</span>
+                                        <span class="font-medium ml-1">03/02/2027</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ruta Terapéutica Sesión por Sesión -->
+                    <div class="bg-white rounded-xl shadow-sm p-5">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fa fa-map-signs text-secondary mr-2"></i> Ruta Terapéutica Automática
+                        </h2>
+                        
+                        <div class="space-y-3 relative before:absolute before:left-4 before:top-0 before:bottom-0 before:w-0.5 before:bg-slate-200">
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">1</div>
+                                <div class="p-3 bg-primary/5 rounded-lg border border-primary/20">
+                                    <h4 class="font-medium">Sesión 1 — Psicoeducación y Alianza</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Explicar modelo biopsicosocial, normalizar síntomas, establecer acuerdos terapéuticos, identificar metas del paciente.</p>
+                                    <span class="inline-block mt-2 text-xs bg-success/10 text-success px-2 py-0.5 rounded">Completada</span>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">2</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 2 — Evaluación Integral y Formulación</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Administrar escalas, construir formulación conjunta, presentar plan de tratamiento.</p>
+                                    <span class="inline-block mt-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">En curso</span>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">3</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 3 — Activación Conductual</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Planificación de actividades gratificantes y maestría, registro semanal, estrategias ante barreras.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">4</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 4 — Identificación de Pensamientos Automáticos</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Distinguir pensamientos de emociones, registro diario, identificar distorsiones cognitivas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">5</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 5 — Reestructuración Cognitiva</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Cuestionar evidencia, generar pensamientos alternativos, experimentos conductuales.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">6-7</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesiones 6-7 — Trabajo con Esquemas</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Explorar orígenes de creencias nucleares, reestructuración de esquemas, experiencias correctivas.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">8</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 8 — Prevención de Recaídas</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Identificar factores desencadenantes, plan de acción, consolidación de avances.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="relative pl-10">
+                                <div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold">9</div>
+                                <div class="p-3 bg-slate-50 rounded-lg border">
+                                    <h4 class="font-medium">Sesión 9 — Cierre y Preparación para Alta</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Resumen de aprendizajes, red de apoyo, plan de seguimiento.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Lateral: Resumen -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-xl shadow-sm p-5">
+                        <h3 class="font-semibold mb-3">Resumen del Plan</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex justify-between">
+                                <span class="text-slate-600">Enfoque principal</span>
+                                <span class="font-medium">TCC + Esquemas</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-slate-600">Sesiones estimadas</span>
+                                <span class="font-medium">16–20</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-slate-600">Frecuencia</span>
+                                <span class="font-medium">Semanal</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-slate-600">Fase actual</span>
+                                <span class="font-medium text-primary">Evaluación / Alianza</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-5">
+                        <h3 class="font-semibold mb-3">Indicadores de Mejoría</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                                <span>Reducción sostenida en escalas PHQ-9 y GAD-7</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                                <span>Aumento de actividades gratificantes y sociales</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                                <span>Disminución de pensamientos autocríticos</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                                <span>Capacidad de tolerancia a emociones desagradables</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-check-circle text-success mt-1 mr-2"></i>
+                                <span>Proyecto de vida y redefinición de propósito</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm p-5 border-2 border-danger/20">
+                        <h3 class="font-semibold mb-3 text-danger">Indicadores de Recaída</h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
+                                <span>Aumento súbito de puntuación en PHQ-9 ≥ 5 puntos</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
+                                <span>Reactivación de aislamiento y abandono de actividades</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
+                                <span>Retorno a creencias nucleares negativas previamente modificadas</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
+                                <span>Inasistencia o retraso repetido a sesiones</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa fa-exclamation-circle text-danger mt-1 mr-2"></i>
+                                <span>Autolesiones o ideación suicida — activar protocolo de seguridad</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña: Evolución y Gráficos -->
+        <section id="evolucion" class="tab-content">
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl shadow-sm p-5">
+                    <h2 class="text-lg font-semibold mb-6">Evolución Longitudinal de Síntomas</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-medium text-center mb-3">PHQ-9 — Depresión</h3>
+                            <div class="h-72">
+                                <canvas id="phq9Chart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-center mb-3">GAD-7 — Ansiedad</h3>
+                            <div class="h-72">
+                                <canvas id="gad7Chart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-center mb-3">Funcionamiento y Calidad de Vida</h3>
+                            <div class="h-72">
+                                <canvas id="whodasChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-center mb-3">Proyección de Recuperación</h3>
+                            <div class="h-72">
+                                <canvas id="proyeccionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-5">
+                    <h2 class="text-lg font-semibold mb-4">Velocidad y Patrón de Respuesta</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center p-4 bg-slate-50 rounded-lg">
+                            <p class="text-sm text-slate-500 mb-1">Tasa de cambio semanal</p>
+                            <p class="text-2xl font-bold text-primary">-0.85 puntos PHQ-9</p>
+                            <p class="text-xs text-slate-400 mt-2">Mayor que el promedio clínico (-0.5)</p>
+                        </div>
+                        <div class="text-center p-4 bg-slate-50 rounded-lg">
+                            <p class="text-sm text-slate-500 mb-1">Patrón de respuesta</p>
+                            <p class="text-lg font-semibold text-secondary">Lineal con fluctuaciones</p>
+                            <p class="text-xs text-slate-400 mt-2">Respuesta estable, sin caídas bruscas</p>
+                        </div>
+                        <div class="text-center p-4 bg-slate-50 rounded-lg">
+                            <p class="text-sm text-slate-500 mb-1">Tiempo estimado a remisión</p>
+                            <p class="text-2xl font-bold text-success">~9 semanas</p>
+                            <p class="text-xs text-slate-400 mt-2">Intervalo de confianza: 7–11 semanas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña: Predicción Clínica -->
+        <section id="prediccion" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-5">
+                    <h3 class="font-semibold mb-4 text-center">Probabilidad de Remisión</h3>
+                    <div class="relative w-36 h-36 mx-auto mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#16a34a" stroke-width="3" stroke-dasharray="87 13" stroke-linecap="round"/>
+                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#16a34a">87%</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-center text-slate-600">Con un tratamiento continuo y adherente</p>
+                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 82%</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-5">
+                    <h3 class="font-semibold mb-4 text-center">Riesgo de Abandono</h3>
+                    <div class="relative w-36 h-36 mx-auto mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="23 77" stroke-linecap="round"/>
+                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#f59e0b">23%</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-center text-slate-600">Factores: evitación, síntomas ansiosos</p>
+                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 76%</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-5">
+                    <h3 class="font-semibold mb-4 text-center">Riesgo de Recaída</h3>
+                    <div class="relative w-36 h-36 mx-auto mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"/>
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="35 65" stroke-linecap="round"/>
+                            <text x="18" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" fill="#f59e0b">35%</text>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-center text-slate-600">Factores: estrés crónico, red de apoyo limitada</p>
+                    <p class="text-xs text-center text-slate-400 mt-2">Confianza: 79%</p>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-white rounded-xl shadow-sm p-5">
+                <h3 class="font-semibold mb-4">Pronóstico por Plazos</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-slate-50">
+                                <th class="text-left p-3 rounded-tl-lg">Plazo</th>
+                                <th class="text-left p-3">Estado esperado</th>
+                                <th class="text-left p-3">Indicadores clave</th>
+                                <th class="text-left p-3 rounded-tr-lg">Evaluación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-3 font-medium">1 mes</td>
+                               
